@@ -3,6 +3,7 @@ namespace Cradle;
 
 use Throwable;
 use Cradle\ViewCompiler;
+use Nyholm\Psr7\Response;
 use Slim\Psr7\Factory\ResponseFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -120,8 +121,8 @@ class Logger
 		$viewCompiler->addView($view);
 
 		// Get the response
-		$responseFactory = new ResponseFactory();
-		$response = $responseFactory->createResponse()->withHeader('Content-Type', 'text/html');
+		$response = new Response();
+		$response = $response->withStatus(404, $e->getMessage())->withHeader('Content-Type', 'text/html');
 		$response->getBody()->write($viewCompiler->compileViews());
 
 		return $response;
