@@ -15,6 +15,7 @@ class CreateUsersTable extends Migration
             $table->string('phone_number', 30);
             $table->integer('userable_id')->unsigned();
             $table->string('userable_type', 300);
+            $table->enum('status', ['active', 'banned'])->default('active');
             $table->rememberToken();
             $table->timestamps();
         });
