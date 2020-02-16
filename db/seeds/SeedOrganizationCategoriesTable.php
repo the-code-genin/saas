@@ -15,9 +15,9 @@ class SeedOrganizationCategoriesTable extends Seed
      */
     public function run()
     {
-        foreach (['Agriculture', 'Finance', 'Technology', 'Others'] as $category) {
+        foreach (['Agriculture', 'Finance', 'Technology', 'Others'] as $categoryName) {
             $category = new OrganizationCategory;
-            $category->name = $category;
+            $category->name = $categoryName;
             $category->save();
         }
     }
