@@ -16,7 +16,7 @@ class Student extends Model
      *
      * @return MorphOne
      */
-    public function userable(): MorphOne
+    public function user(): MorphOne
     {
         return $this->morphOne(User::class, 'userable');
     }
