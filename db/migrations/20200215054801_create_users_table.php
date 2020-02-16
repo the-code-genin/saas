@@ -9,9 +9,10 @@ class CreateUsersTable extends Migration
     {
         $this->schema->create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('username', 255);
+            $table->string('email', 255);
             $table->string('password', 255);
-            $table->string('auth_token', 255);
+            $table->text('address');
+            $table->string('phone_number', 30);
             $table->rememberToken();
             $table->timestamps();
         });
