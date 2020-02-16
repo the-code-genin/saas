@@ -17,8 +17,7 @@ class CreateOrganizationsTable extends Migration
 
             $table->foreign('category_id')
                 ->references('id')
-                ->on('organization_categories')
-                ->onDelete('update');
+                ->on('organization_categories');
         });
     }
 
