@@ -2,6 +2,7 @@
 
 use Slim\App;
 use App\Controllers\Api\Home;
+use App\Controllers\Api\OrganizationCategories;
 use App\Middleware\CORSMiddleware;
 use Slim\Routing\RouteCollectorProxy;
 
@@ -12,5 +13,15 @@ use Slim\Routing\RouteCollectorProxy;
  */
 
 $app->group('/api/v1', function (RouteCollectorProxy $group) {
+
+    // Organizations end point.
+    $group->group('/organizations', function(RouteCollectorProxy $group) {
+
+        // Organization categories endpoint.
+        $group->group('/categories', function(RouteCollectorProxy $group) {
+            $group->get('', OrganizationCategories::class.':index');
+        });
+    });
+    
     $group->any('[{any:.*}]', Home::class.':index');
 })->add(new CORSMiddleware);

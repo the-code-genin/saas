@@ -8,6 +8,8 @@ class Home extends Controller
 {
     /**
      * The index route.
+     * 
+     * @return array
      */
     protected function index(ServerRequestInterface $request, object $params)
     {
