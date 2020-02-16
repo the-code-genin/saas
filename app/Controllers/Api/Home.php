@@ -12,10 +12,12 @@ class Home extends Controller
     protected function index(ServerRequestInterface $request, object $params)
     {
         return [
-            'success' => true,
-            'message' => 'Hello world',
-            'data' => [],
-            'error_code' => '',
+            'success' => false,
+            'error' => [
+                'code' => 404,
+                'type' => 'NotFoundError',
+                'message' => 'The api route you requested for was not found.',
+            ]
         ];
     }
 }
