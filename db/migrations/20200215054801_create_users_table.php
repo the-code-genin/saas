@@ -9,7 +9,7 @@ class CreateUsersTable extends Migration
     {
         $this->schema->create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('email', 255);
+            $table->string('email', 255)->unique();
             $table->string('password', 255);
             $table->text('address');
             $table->string('phone_number', 30);
