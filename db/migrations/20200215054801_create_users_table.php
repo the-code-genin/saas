@@ -13,6 +13,8 @@ class CreateUsersTable extends Migration
             $table->string('password', 255);
             $table->text('address');
             $table->string('phone_number', 30);
+            $table->integer('userable_id')->unsigned();
+            $table->string('userable_type', 300);
             $table->rememberToken();
             $table->timestamps();
         });
