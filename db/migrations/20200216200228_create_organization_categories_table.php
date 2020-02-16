@@ -11,6 +11,7 @@ class CreateOrganizationCategoriesTable extends Migration
             $table->increments('id');
             $table->string('name', 300);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

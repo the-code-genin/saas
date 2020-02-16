@@ -10,6 +10,9 @@ class User extends Model
 {
     use SoftDeletes;
 
+    /** @var array */
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+
     /**
      * Get the owner for this user instance.
      *

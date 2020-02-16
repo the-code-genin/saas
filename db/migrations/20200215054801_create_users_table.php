@@ -16,6 +16,7 @@ class CreateUsersTable extends Migration
             $table->integer('userable_id')->unsigned();
             $table->string('userable_type', 300);
             $table->enum('status', ['active', 'banned'])->default('active');
+            $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();
         });

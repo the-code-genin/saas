@@ -13,6 +13,7 @@ class CreateStudentsTable extends Migration
             $table->enum('availability', ['freelance', 'part_time']);
             $table->decimal('hourly_rate', 10, 2);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

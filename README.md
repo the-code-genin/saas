@@ -19,3 +19,4 @@ Students as a service.
 - Copy the **.gitignore.example** file to **.gitignore**.
 - Run `php vendor/bin/phinx migrate`.
 - Configure your web server to direct requests to the **public** folder if the applicable asset file or directory being requested exists in the folder, else, redirect all other requests to the **public/index.php** file **(A sample configuration for apache server has already been provided by default so no need to go through this if you are using apache web server.)**.
+- Run `php vendor/bin/phinx seed:run -s SeedOrganizationCategoriesTable`
