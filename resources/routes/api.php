@@ -19,9 +19,12 @@ $app->group('/api/v1', function (RouteCollectorProxy $group) {
 
         // Organization categories endpoint.
         $group->group('/categories', function(RouteCollectorProxy $group) {
-            $group->get('', OrganizationCategories::class.':index');
+            $group->get('[/{id:\d*}]', OrganizationCategories::class.':index');
+            $group->post('', OrganizationCategories::class.':create');
+            $group->map(['PUT', 'PATCH'], '', OrganizationCategories::class.':update');
+            $group->delete('', OrganizationCategories::class.':delete');
         });
     });
-    
+
     $group->any('[{any:.*}]', Home::class.':index');
 })->add(new CORSMiddleware);
