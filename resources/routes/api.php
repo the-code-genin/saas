@@ -20,10 +20,10 @@ $app->group('/api/v1', function (RouteCollectorProxy $group) use ($app) {
     // User routes.
     $group->group('/user', function(RouteCollectorProxy $group) use ($app) {
         $group->post('/login', Users::class.':login');
-        $group->post('/signup', Users::class.':signup');
+        $group->post('[/signup]', Users::class.':signup');
 
         $group->group('', function(RouteCollectorProxy $group) { // Secure routes.
-            $group->get('', Users::class.':getLoggedInUser');
+            $group->get('', Users::class.':index');
         })->add(new UserAPIAuth($app));
     });
 
