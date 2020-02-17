@@ -31,39 +31,39 @@ The API follows the specifications defined [here](https://github.com/Gbahdeyboh/
 
 ## API Methods
 
-All requests should be in the form[https://stuaas.herokuapp.com/api/API_VERSION/METHOD_NAME](https://stuaas.herokuapp.com/api/API_VERSION/METHOD_NAME).
+All requests should be in the form [https://stuaas.herokuapp.com/api/API_VERSION/METHOD_NAME](https://stuaas.herokuapp.com/api/API_VERSION/METHOD_NAME).
 
 ### API Version: v1
 
-All requests should be in the form[https://stuaas.herokuapp.com/api/v1/METHOD_NAME](https://stuaas.herokuapp.com/api/v1/METHOD_NAME).
+All requests should be in the form [https://stuaas.herokuapp.com/api/v1/METHOD_NAME](https://stuaas.herokuapp.com/api/v1/METHOD_NAME).
 
 #### Organization Categories
 
 Peform CRUD operations on organization categories.
 
-##### `GET` organizations/categories
+#### `GET` organizations/categories
 
-Get the organization categories.
+Get the organization categories. The results may also be pagainated.
 
-###### Request Parameters
+##### Request Parameters
 
 | Field   | Type    | Required | Description                                                                         |
 |---------|---------|----------|-------------------------------------------------------------------------------------|
 | page    | integer | Optional | If specified paginates the results. This sets the current page number.              |
 | perPage | integer | Optional | If specified paginates the results. This sets the maximum number of items per page. |
 
-###### Response
+##### Response
 
 | Field   | Type    | Description                                                                         |
 |---------|---------|-------------------------------------------------------------------------------------|
 | total   | integer | The total number of categories in the database.                                     |
-| data    | array   | The array of organization categories.                                               |
+| data    | array   | The array of organization categories. The results may also be paginated.             |
 
-##### `GET` organizations/categories/{id: integer}
+#### `GET` organizations/categories/{id: integer}
 
 Get an organization category by id.
 
-###### Response
+##### Response
 
 | Field   | Type    | Description                                                                         |
 |---------|---------|-------------------------------------------------------------------------------------|
