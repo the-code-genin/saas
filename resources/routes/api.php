@@ -4,6 +4,7 @@ use Slim\App;
 use App\Controllers\Api\Home;
 use App\Controllers\Api\OrganizationCategories;
 use App\Middleware\CORSMiddleware;
+use App\Middleware\JSONBodyParser;
 use Slim\Routing\RouteCollectorProxy;
 
 /**
@@ -15,9 +16,9 @@ use Slim\Routing\RouteCollectorProxy;
 $app->group('/api/v1', function (RouteCollectorProxy $group) {
 
     // Auth Routes.
-    $group->post('login', Home::class.':login');
-    $group->post('signup', Home::class.':signup');
-    $group->post('me', Home::class.':getLoggedInUser');
+    $group->post('/login', Home::class.':login');
+    $group->post('/signup', Home::class.':signup');
+    $group->get('/me', Home::class.':getLoggedInUser');
 
 
     // Organizations end points.
@@ -34,4 +35,5 @@ $app->group('/api/v1', function (RouteCollectorProxy $group) {
 
     // 404 error catcher.
     $group->any('[{any:.*}]', Home::class.':index');
-})->add(new CORSMiddleware);
+})->add(new CORSMiddleware)
+->add(new JSONBodyParser);
