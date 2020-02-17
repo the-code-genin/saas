@@ -6,9 +6,10 @@ The api is currently hosted on [https://stuaas.herokuapp.com](https://stuaas.her
 
 ## Making requests
 
-All queries to the SaaS API must be served over HTTPS and need to be presented in this form: [https://stuaas.herokuapp.com/api/API_VERSION/METHOD_NAME](https://stuaas.herokuapp.com/api/API_VERSION/METHOD_NAME). Like this for example:
+All queries to the SaaS API must be served over `HTTP(S)` and need to be presented in this form: [https://stuaas.herokuapp.com/api/API_VERSION/METHOD_NAME](https://stuaas.herokuapp.com/api/API_VERSION/METHOD_NAME). Like this for example:
 
 [https://stuaas.herokuapp.com/api/v1/login](https://stuaas.herokuapp.com/api/v1/login).
+
 The supported API request methods are; `GET`, `POST`, `PUT`, `PATCH` and `DELETE`. The `PUT` and `PATCH` methods are essentially the same methods, so the usage is based on user preference. The API is a REST API, so each of the methods specifies the type of action the user wants to do with an API method.
 
 By default, only `GET` and `POST` are methods are supported by web browsers. To specify the other methods, the base request to the API endpoint must be a `POST` request, then you add an extra header; `X-Http-Method-Override`, the value of this header is one of `POST`, `PUT`, `PATCH` and `DELETE`. An optional `Content-Type` header with value of `application/json` should also be specified although not compulsory.
