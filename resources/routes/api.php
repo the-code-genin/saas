@@ -14,10 +14,16 @@ use Slim\Routing\RouteCollectorProxy;
 
 $app->group('/api/v1', function (RouteCollectorProxy $group) {
 
-    // Organizations end point.
+    // Auth Routes.
+    $group->post('login', Home::class.':login');
+    $group->post('signup', Home::class.':signup');
+    $group->post('me', Home::class.':getLoggedInUser');
+
+
+    // Organizations end points.
     $group->group('/organizations', function(RouteCollectorProxy $group) {
 
-        // Organization categories endpoint.
+        // Organization categories endpoints.
         $group->group('/categories', function(RouteCollectorProxy $group) {
             $group->get('[/[{id:\d*}]]', OrganizationCategories::class.':index');
             $group->post('', OrganizationCategories::class.':create');
@@ -26,5 +32,6 @@ $app->group('/api/v1', function (RouteCollectorProxy $group) {
         });
     });
 
+    // 404 error catcher.
     $group->any('[{any:.*}]', Home::class.':index');
 })->add(new CORSMiddleware);
