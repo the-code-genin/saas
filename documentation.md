@@ -24,6 +24,23 @@ Here is a full explanation on the usage of each request method;
 | PUT/PATCh | Update data on an api endpoint.     |
 | DELETE    | Delete data on an api endpoint.     |
 
-All responses from the API are also JSON encoded. They follow the specifications defined [here](https://github.com/Gbahdeyboh/AuthServer).
+All responses from the API are also JSON encoded.
+
+The API follows the specifications defined [here](https://github.com/Gbahdeyboh/AuthServer) for responses and authentication.
 
 ## API Methods
+
+All requests should be in the form[https://stuaas.herokuapp.com/api/API_VERSION/METHOD_NAME](https://stuaas.herokuapp.com/api/API_VERSION/METHOD_NAME).
+
+### API Version: v1
+
+All requests should be in the form[https://stuaas.herokuapp.com/api/v1/METHOD_NAME](https://stuaas.herokuapp.com/api/v1/METHOD_NAME).
+
+#### Organization Categories
+
+Peform CRUD operations on organization categories.
+
+**Endpoints:**
+
+- `GET` organizations/categories
+Get the organization categories.
