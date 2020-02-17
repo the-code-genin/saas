@@ -23,10 +23,11 @@ class User extends Model
      */
     public function toArray(): array
     {
-        $data = parent::toArray();
+        $data = parent::toArray();   
         $userable = $this->userable->toArray();
         $data = array_merge($userable, $data);
         $data['user_type'] = $this->user_type;
+        unset($data['userable']);
 
         return $data;
     }
