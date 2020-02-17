@@ -19,7 +19,6 @@ class SeedOrganizationsTable extends Seed
     {
         $organization = new Organization;
         $organization->name = $this->faker->name;
-        $organization->address = $this->faker->address;
         $organization->description = $this->faker->sentence;
         $organization->category_id = OrganizationCategory::inRandomOrder()->first()->id;
         $organization->save();

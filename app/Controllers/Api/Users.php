@@ -2,11 +2,13 @@
 namespace App\Controllers\Api;
 
 use App\Helpers\Api;
-use App\Models\OrganizationCategory;
 use App\Models\User;
 use Cradle\Controller;
-use Psr\Http\Message\ServerRequestInterface;
+use App\Models\Student;
 use Valitron\Validator;
+use App\Models\Organization;
+use App\Models\OrganizationCategory;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Resource controller for users.
@@ -97,6 +99,9 @@ class Users extends Controller
         $validator->rule('lengthMin', 'password', 6);
         $validator->rule('in', 'user_type', ['student', 'organization']);
         $validator->rule('regex', 'phone_number', '/^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/i');
+        $validator->rule(function($field, $value, $params, $fields) {
+            return User::where('email', $value)->count() == 0;
+        }, 'email')->message("This email has been taken.");
 
         if (!$validator->validate()) { // Validation fails.
             $errors = $validator->errors();
@@ -125,11 +130,41 @@ class Users extends Controller
 
 
         // Create user account.
+        switch ($input->user_type) {
+            case 'student':
+                $userable = new Student;
+                $userable->full_name = $input->full_name;
+                $userable->availability = $input->availability;
+                $userable->hourly_rate = $input->hourly_rate;
+            break;
+
+            case 'organization':
+                $userable = new Organization;
+                $userable->name = $input->name;
+                $userable->description = $input->sentence;
+                $userable->category_id = $input->category_id;
+            break;
+        }
+
+        $user = new User;
+        $user->email = $input->email;
+        $user->password = password_hash($input->password, PASSWORD_DEFAULT);
+        $user->address = $input->address;
+        $user->phone_number = $input->phone_number;
+
+        $userable->save();
+        $user->userable()->associate($userable);
+        $user->save();
+
 
         // Send activation email.
 
+
         // Response
-        $payload = [];
+        $payload = [
+            'data' => $user,
+        ];
+
         return [
             'success' => true,
             'payload' => $payload
