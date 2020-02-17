@@ -41,7 +41,27 @@ All requests should be in the form[https://stuaas.herokuapp.com/api/v1/METHOD_NA
 
 Peform CRUD operations on organization categories.
 
-**Endpoints:**
+##### Endpoints
 
 - `GET` organizations/categories
 Get the organization categories.
+
+###### Request Parameters
+
+| Field   | Type    | Required | Description                                                                         |
+|---------|---------|----------|-------------------------------------------------------------------------------------|
+| page    | integer | Optional | If specified paginates the results. This sets the current page number.              |
+| perPage | integer | Optional | If specified paginates the results. This sets the maximum number of items per page. |
+
+###### Response
+
+| Field   | Type    | Required | Description                                                                         |
+|---------|---------|----------|-------------------------------------------------------------------------------------|
+
+- `GET` organizations/categories/{id: integer}
+Get the organization categories.
+
+###### Response
+
+| Field   | Type    | Required | Description                                                                         |
+|---------|---------|----------|-------------------------------------------------------------------------------------|
