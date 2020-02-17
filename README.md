@@ -1,6 +1,8 @@
-# SaaS
+# SaaS Backend
 
-Students as a service.
+Students as a service backend api.
+
+The api is currently hosted on [https://stuaas.herokuapp.com](https://stuaas.herokuapp.com). The documentation for the api is found [here](documentation.md).
 
 ## Requirements
 
