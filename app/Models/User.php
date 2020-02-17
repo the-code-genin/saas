@@ -26,8 +26,34 @@ class User extends Model
         $data = parent::toArray();
         $userable = $this->userable->toArray();
         $data = array_merge($userable, $data);
+        $data['user_type'] = $this->user_type;
 
         return $data;
+    }
+
+    /**
+     * Get the user type based on the userable property.
+     *
+     * @param mixed $value
+     * @return string
+     */
+    public function getUserTypeAttribute($value): string
+    {
+        switch ($this->userable_type) {
+            case Student::class:
+                $type = 'student';
+            break;
+
+            case Organization::class:
+                $type = 'organization';
+            break;
+
+            default:
+                $type = 'unknown';
+            break;
+        }
+        
+        return $type;
     }
 
     /**
