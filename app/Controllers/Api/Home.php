@@ -90,7 +90,10 @@ class Home extends Controller
      */
     protected function getLoggedInUser(ServerRequestInterface $request, object $params): array
     {
-        $payload = [];
+        $payload = [
+            'data' => $request->getAttribute('user'),
+        ];
+
         return [
             'success' => true,
             'payload' => $payload

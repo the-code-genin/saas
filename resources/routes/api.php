@@ -37,6 +37,7 @@ $app->group('/api/v1', function (RouteCollectorProxy $group) use ($app) {
         });
     });
 
+
     // 404 error catcher.
     $group->any('[{any:.*}]', Home::class.':index');
 })->add(new CORSMiddleware)->add(new JSONBodyParser);
