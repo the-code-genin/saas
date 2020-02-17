@@ -47,7 +47,9 @@ class Home extends Controller
         }
 
         // Generate and save api token.
-        $apiToken = bin2hex(random_bytes(64));
+        $hex = bin2hex(random_bytes(64));
+        $apiToken = '$' . '.' . $user->id . '.' . password_hash($hex, PASSWORD_DEFAULT) . '.' . $hex;
+
         $this->db->table('user_api_tokens')->insert([
             'user_id' => $user->id,
             'token' => $apiToken,
