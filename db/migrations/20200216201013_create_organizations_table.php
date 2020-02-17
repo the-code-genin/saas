@@ -10,7 +10,6 @@ class CreateOrganizationsTable extends Migration
         $this->schema->create('organizations', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 300)->unique();
-            $table->string('address', 300);
             $table->text('description');
             $table->integer('category_id')->unsigned();
             $table->timestamps();
