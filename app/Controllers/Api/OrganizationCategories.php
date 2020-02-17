@@ -7,6 +7,9 @@ use App\Models\OrganizationCategory;
 use Psr\Http\Message\ServerRequestInterface;
 use Illuminate\Pagination\Paginator;
 
+/**
+ * Resource controller for organization categories.
+ */
 class OrganizationCategories extends Controller
 {
     /**
