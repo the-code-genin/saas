@@ -67,4 +67,4 @@ Get an organization category by id.
 
 | Field   | Type    | Description                                                                         |
 |---------|---------|-------------------------------------------------------------------------------------|
-| data    | array   | The organization category.                                               |
+| data    | object   | The organization category.                                               |
