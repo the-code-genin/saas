@@ -16,9 +16,9 @@ use Slim\Routing\RouteCollectorProxy;
 $app->group('/api/v1', function (RouteCollectorProxy $group) {
 
     // Auth Routes.
-    $group->post('/login', Home::class.':login');
-    $group->post('/signup', Home::class.':signup');
-    $group->get('/me', Home::class.':getLoggedInUser');
+    $group->post('/user/login', Home::class.':login');
+    $group->post('/user/signup', Home::class.':signup');
+    $group->get('/user', Home::class.':getLoggedInUser');
 
 
     // Organizations end points.
