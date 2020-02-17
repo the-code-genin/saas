@@ -16,6 +16,9 @@ class OrganizationCategory extends Model
     /** @var string The table associated with the model. */
     protected $table = 'organization_categories';
 
+    /** @var array */
+    protected $hidden = ['updated_at', 'deleted_at'];
+
     /**
      * Get the organizations that have this category.
      *

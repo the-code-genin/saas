@@ -14,6 +14,25 @@ class Organization extends Model
     /** @var array */
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
+    /** @var array */
+    protected $hidden = ['updated_at', 'deleted_at', 'category_id'];
+
+    /**
+     * Get array representation of the organization.
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $data = parent::toArray();
+        $extraData = [
+            'category' => OrganizationCategory::select(['id', 'name'])->where('id', $this->category_id)->first()->toArray()
+        ];
+        $data = array_merge($extraData, $data);
+
+        return $data;
+    }
+
     /**
      * Get the category for an organization.
      *
