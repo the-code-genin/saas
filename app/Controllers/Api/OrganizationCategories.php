@@ -20,7 +20,7 @@ class OrganizationCategories extends Controller
             $payload = [
                 'data' => OrganizationCategory::select(['id', 'name'])->where('id', $params->id)->first()
             ];
-            if (is_null($payload)) { // If the category was not found
+            if (is_null($payload['data'])) { // If the category was not found
                 return Api::generateErrorResponse(404, 'NotFoundError', 'The resource you requested for was not found.');
             }
         } else { // If a list of categories is to be gotten
@@ -29,7 +29,7 @@ class OrganizationCategories extends Controller
                 $perPage = isset($request->getQueryParams()['perPage']) ? $request->getQueryParams()['perPage'] : 10;
                 
                 /** @var Paginator */
-                $results = OrganizationCategory::paginate($perPage, ['id', 'name'], 'page', $page);
+                $results = OrganizationCategory::paginate($perPage, ['id', 'name'], 'results', $page);
                 $payload = [
                     'total' => $results->total(),
                     'per_page' => $results->perPage(),

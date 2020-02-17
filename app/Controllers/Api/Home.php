@@ -14,6 +14,6 @@ class Home extends Controller
      */
     protected function index(ServerRequestInterface $request, object $params)
     {
-        return Api::generateErrorResponse(404, 'NotFoundError', 'The api route you requested for was not found.');
+        return Api::generateErrorResponse(404, 'NotFoundError', 'The resource you requested for was not found.');
     }
 }
