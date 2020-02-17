@@ -44,24 +44,26 @@ Peform CRUD operations on organization categories.
 ##### Endpoints
 
 - `GET` organizations/categories
-Get the organization categories.
+ 
+ Get the organization categories.
 
-###### Request Parameters
+ ###### Request Parameters
 
-| Field   | Type    | Required | Description                                                                         |
-|---------|---------|----------|-------------------------------------------------------------------------------------|
-| page    | integer | Optional | If specified paginates the results. This sets the current page number.              |
-| perPage | integer | Optional | If specified paginates the results. This sets the maximum number of items per page. |
+ | Field   | Type    | Required | Description                                                                         |
+ |---------|---------|----------|-------------------------------------------------------------------------------------|
+ | page    | integer | Optional | If specified paginates the results. This sets the current page number.              |
+ | perPage | integer | Optional | If specified paginates the results. This sets the maximum number of items per page. |
 
-###### Response
+ ###### Response
 
-| Field   | Type    | Required | Description                                                                         |
-|---------|---------|----------|-------------------------------------------------------------------------------------|
+ | Field   | Type    | Required | Description                                                                         |
+ |---------|---------|----------|-------------------------------------------------------------------------------------|
 
 - `GET` organizations/categories/{id: integer}
-Get the organization categories.
 
-###### Response
+ Get the organization categories.
 
-| Field   | Type    | Required | Description                                                                         |
-|---------|---------|----------|-------------------------------------------------------------------------------------|
+ ###### Response
+
+ | Field   | Type    | Required | Description                                                                         |
+ |---------|---------|----------|-------------------------------------------------------------------------------------|
