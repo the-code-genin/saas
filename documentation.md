@@ -54,14 +54,17 @@ Get the organization categories.
 
 ###### Response
 
-| Field   | Type    | Required | Description                                                                         |
-|---------|---------|----------|-------------------------------------------------------------------------------------|
+| Field   | Type    | Description                                                                         |
+|---------|---------|-------------------------------------------------------------------------------------|
+| total   | integer | The total number of categories in the database.                                     |
+| data    | array   | The array of organization categories.                                               |
 
 ##### `GET` organizations/categories/{id: integer}
 
-Get the organization category by id.
+Get an organization category by id.
 
 ###### Response
 
-| Field   | Type    | Required | Description                                                                         |
-|---------|---------|----------|-------------------------------------------------------------------------------------|
+| Field   | Type    | Description                                                                         |
+|---------|---------|-------------------------------------------------------------------------------------|
+| data    | array   | The organization category.                                               |
