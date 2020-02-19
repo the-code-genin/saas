@@ -14,7 +14,7 @@ class User extends Model
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /** @var array */
-    protected $hidden = ['updated_at', 'deleted_at', 'remember_token', 'userable_id', 'userable_type', 'password'];
+    protected $hidden = ['updated_at', 'deleted_at', 'remember_token', 'userable_id', 'userable_type', 'password', 'userable'];
 
     /**
      * Get array representation of the user.
@@ -23,11 +23,10 @@ class User extends Model
      */
     public function toArray(): array
     {
-        $data = parent::toArray();   
+        $data = parent::toArray();
         $userable = $this->userable->toArray();
         $data = array_merge($userable, $data);
         $data['user_type'] = $this->user_type;
-        unset($data['userable']);
 
         return $data;
     }
