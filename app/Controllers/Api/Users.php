@@ -8,6 +8,7 @@ use App\Models\Student;
 use Valitron\Validator;
 use App\Models\Organization;
 use App\Models\OrganizationCategory;
+use Carbon\Carbon;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -69,6 +70,7 @@ class Users extends Controller
         $this->db->table('user_api_tokens')->insert([
             'user_id' => $user->id,
             'token' => $apiToken,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
         // Response.

@@ -72,7 +72,7 @@ class UserAPIAuth extends MiddleWare
         }
 
         // Handle request.
-        $request = $request->withAttribute('user', $user);
+        $request = $request->withAttribute('user', $user)->withAttribute('auth_token', $apiToken);
         $response = $handler->handle($request);
         return $response;
     }
