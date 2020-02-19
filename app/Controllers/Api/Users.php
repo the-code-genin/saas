@@ -120,6 +120,9 @@ class Users extends Controller
                 $validator->rule(function($field, $value, $params, $fields) {
                     return OrganizationCategory::where('id', $value)->count() == 1;
                 }, 'category_id')->message("The chosen category does not exist.");
+                $validator->rule(function($field, $value, $params, $fields) {
+                    return Organization::where('name', $value)->count() == 0;
+                }, 'name')->message("This name has been taken.");
             break;
         }
 
@@ -141,7 +144,7 @@ class Users extends Controller
             case 'organization':
                 $userable = new Organization;
                 $userable->name = $input->name;
-                $userable->description = $input->sentence;
+                $userable->description = $input->description;
                 $userable->category_id = $input->category_id;
             break;
         }

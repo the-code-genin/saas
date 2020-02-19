@@ -15,7 +15,7 @@ class Organization extends Model
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /** @var array */
-    protected $hidden = ['updated_at', 'deleted_at', 'category_id'];
+    protected $hidden = ['id', 'updated_at', 'deleted_at', 'category_id'];
 
     /**
      * Get array representation of the organization.
