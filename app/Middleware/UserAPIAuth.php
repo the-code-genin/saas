@@ -3,6 +3,7 @@ namespace App\Middleware;
 
 use App\Helpers\Api;
 use App\Models\User;
+use Carbon\Carbon;
 use Slim\App;
 use Cradle\MiddleWare;
 use Psr\Http\Message\ResponseInterface;
@@ -61,13 +62,22 @@ class UserAPIAuth extends MiddleWare
 
 
         // Validate token.
-        $user_id = explode('.', $apiToken, 2)[1];
-        $user = User::where('id', $user_id)->first();
+        $userId = explode('.', $apiToken, 2)[1];
+        $user = User::where('id', $userId)->first();
         if (is_null($user)) { // If no user exists.
-            $response = Api::generateErrorResponse(401, 'AuthenticationError', 'Invalid authorization header.');
+            $response = Api::generateErrorResponse(401, 'AuthenticationError', 'Invalid authorization token.');
             return $this->generateResponse($response);
-        } else if ($this->db->table('user_api_tokens')->where('token', $apiToken)->where('user_id', $user_id)->count() != 1) {
-            $response = Api::generateErrorResponse(401, 'AuthenticationError', 'Invalid authorization header.');
+        } else if ($this->db->table('user_api_tokens')->where('token', $apiToken)->where('user_id', $userId)->count() != 1) {
+            $response = Api::generateErrorResponse(401, 'AuthenticationError', 'Invalid authorization token.');
+            return $this->generateResponse($response);
+        }
+
+        // Remove an expired token
+        $date = $this->db->table('user_api_tokens')->where('token', $apiToken)->where('user_id', $userId)->first()->created_at;
+        $createdAt = Carbon::createFromFormat('Y-m-d H:i:s', $date);
+        if (Carbon::now()->diffInDays($createdAt) >= 30) { // Expired token
+            $this->db->table('user_api_tokens')->where('token', $apiToken)->where('user_id', $userId)->delete();
+            $response = Api::generateErrorResponse(401, 'AuthenticationError', 'Expired authorization token.');
             return $this->generateResponse($response);
         }
 
