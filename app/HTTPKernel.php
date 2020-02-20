@@ -3,13 +3,14 @@
 namespace App;
 
 use Slim\Middleware\MethodOverrideMiddleware;
+use Cradle\ViewCompiler;
 
 /**
  * This kernel serves HTTP requests.
  */
 class HTTPKernel extends Kernel
 {
-    /** @var array $middleware The middleware classes to be registered for all routes for every request. */
+    /** @var array $middlewarAPP_URLe The middleware classes to be registered for all routes for every request. */
     protected $middlewares = [
         MethodOverrideMiddleware::class,
     ];
@@ -28,6 +29,9 @@ class HTTPKernel extends Kernel
      */
     protected function boot(): void
     {
-        // Code.
+        // Set default parameters for views.
+        /** @var ViewCompiler */
+        $viewCompiler = &$this->app->getContainer()->get('view');
+        $viewCompiler->setDefaultParameter('app_url', getenv('APP_URL'));
     }
 }
