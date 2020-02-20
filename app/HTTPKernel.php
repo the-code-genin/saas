@@ -31,7 +31,7 @@ class HTTPKernel extends Kernel
     {
         // Set default parameters for views.
         /** @var ViewCompiler */
-        $viewCompiler = &$this->app->getContainer()->get('view');
+        $viewCompiler = $this->app->getContainer()->get('view');
         $viewCompiler->setDefaultParameter('app_url', getenv('APP_URL'));
     }
 }

@@ -174,8 +174,8 @@ class Users extends Controller
          */
 
         $view = new View('email/welcome.twig', ['user' => $user]);
-        $viewCompiler = &$this->container->get('view');
-        $mailer = &$this->container->get('mailer');
+        $viewCompiler = $this->container->get('view');
+        $mailer = $this->container->get('mailer');
         $mail = $viewCompiler->clearViews()->addView($view)->compileViews();
         $sent = Email::send($mailer, $user->email, 'Welcome To SaaS!', $mail);
         if (!$sent) { // An error occured
