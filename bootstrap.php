@@ -133,11 +133,12 @@ $container->set('mailer', function (ContainerInterface $container) {
 	$mailer->SMTPDebug = SMTP::DEBUG_SERVER;
 	$mailer->isSMTP();
 	$mailer->Host       = getenv('SMTP_HOST') ? getenv('SMTP_HOST') : 'smtp.host.com';
-	$mailer->SMTPAuth   = (bool) getenv('SMTP_VALIDATION') ? getenv('SMTP_VALIDATION') : 1;
+	$mailer->SMTPAuth   = (bool) (getenv('SMTP_VALIDATION') ? getenv('SMTP_VALIDATION') : 1);
 	$mailer->Username   = getenv('SMTP_USERNAME') ? getenv('SMTP_USERNAME') : 'username';
 	$mailer->Password   = getenv('SMTP_PASSWORD') ? getenv('SMTP_PASSWORD') : 'password';
 	$mailer->SMTPSecure = getenv('SMTP_CRYPTO') ? getenv('SMTP_CRYPTO') : 'tls';
 	$mailer->Port       = getenv('SMTP_PORT') ? getenv('SMTP_PORT') : '587';
+	$mailer->setFrom(getenv('SMTP_FROM_EMAIL'), getenv('SMTP_FROM_NAME'));
 
     return $mailer;
 });

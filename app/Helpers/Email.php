@@ -25,7 +25,6 @@ class Email
     {
         try {
             //Recipients
-            $mailer->setFrom(getenv('SMTP_FROM_EMAIL'), getenv('SMTP_FROM_NAME'));
             $mailer->addAddress($email);
 
             // Attachments
