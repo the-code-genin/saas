@@ -3,13 +3,17 @@ namespace App\Controllers\Api;
 
 use Carbon\Carbon;
 use App\Helpers\Api;
+use App\Helpers\Email;
 use App\Models\User;
 use Cradle\Controller;
 use App\Models\Student;
 use Valitron\Validator;
 use App\Models\Organization;
 use App\Models\OrganizationCategory;
+use Cradle\View;
 use Psr\Http\Message\ServerRequestInterface;
+use Cradle\ViewCompiler;
+use PHPMailer\PHPMailer\PHPMailer;
 
 /**
  * Resource controller for users.
@@ -162,8 +166,22 @@ class Users extends Controller
         $user->save();
 
 
-        // Send activation email.
+        /**
+         * Send activation email.
+         * 
+         * @var ViewCompiler $viewCompiler
+         * @var PHPMailer $mailer
+         */
 
+        $view = new View('email/welcome.twig', ['user' => $user]);
+        $viewCompiler = &$this->container->get('view');
+        $mailer = &$this->container->get('mailer');
+        $mail = $viewCompiler->clearViews()->addView($view)->compileViews();
+        $sent = Email::send($mailer, $user->email, 'Welcome To SaaS!', $mail);
+        if (!$sent) { // An error occured
+            $user->forceDelete();
+            return Api::generateErrorResponse(500, 'ServerError', 'An error occured!');
+        }
 
         // Response
         $payload = [
