@@ -12,8 +12,6 @@ use App\Models\Organization;
 use App\Models\OrganizationCategory;
 use Cradle\View;
 use Psr\Http\Message\ServerRequestInterface;
-use Cradle\ViewCompiler;
-use PHPMailer\PHPMailer\PHPMailer;
 
 /**
  * Resource controller for users.
@@ -166,19 +164,11 @@ class Users extends Controller
         $user->save();
 
 
-        /**
-         * Send activation email.
-         * 
-         * @var ViewCompiler $viewCompiler
-         * @var PHPMailer $mailer
-         */
-
-        $view = new View('email/welcome.twig', ['user' => $user]);
-        $viewCompiler = $this->container->get('view');
-        $mailer = $this->container->get('mailer');
-        $mail = $viewCompiler->clearViews()->addView($view)->compileViews();
-        $sent = Email::send($mailer, $user->email, 'Welcome To SaaS!', $mail);
-        if (!$sent) { // An error occured
+        // Send activation email.
+        $mail = $this->container->get('view')->clearViews()
+            ->addView(new View('email/welcome.twig', ['user' => $user]))
+            ->compileViews();
+        if (!Email::send($this->container->get('mailer'), $user->email, 'Welcome To SaaS!', $mail)) { // An error occured
             $user->forceDelete();
             return Api::generateErrorResponse(500, 'ServerError', 'An error occured!');
         }
