@@ -7,14 +7,48 @@ class ModifyUsersStatusColumn extends Migration
 {
     public function up()
     {
-        $this->db->connection()->getPdo()
-            ->exec("ALTER TABLE users MODIFY COLUMN status ENUM('pending','active','banned') DEFAULT 'pending' NOT NULL;");
+        $this->schema->table('users', function (Blueprint $table) {
+            $table->enum('_temp_column', ['active', 'banned']);
+        });
+
+        $this->db->connection()->getPdo()->exec("UPDATE users SET _temp_column = status");
+
+        $this->schema->table('users', function (Blueprint $table) {
+            $table->dropColumn('status');
+        });
+
+        $this->schema->table('users', function (Blueprint $table) {
+            $table->enum('status', ['active', 'banned', 'pending'])->default('pending');
+        });
+
+        $this->db->connection()->getPdo()->exec("UPDATE users SET status = _temp_column");
+
+        $this->schema->table('users', function (Blueprint $table) {
+            $table->dropColumn('_temp_column');
+        });
     }
 
     public function down()
     {
-        $this->db->table('users')->where('status', 'pending')->update(['status' => 'active']);
-        $this->db->connection()->getPdo()
-            ->exec("ALTER TABLE users MODIFY COLUMN status ENUM('active','banned') DEFAULT 'active' NOT NULL;");
+        $this->schema->table('users', function (Blueprint $table) {
+            $table->enum('_temp_column', ['active', 'banned', 'pending']);
+        });
+
+        $this->db->connection()->getPdo()->exec("UPDATE users SET _temp_column = status");
+        $this->db->connection()->getPdo()->exec("UPDATE users SET _temp_column = 'active' WHERE _temp_column = 'pending'");
+
+        $this->schema->table('users', function (Blueprint $table) {
+            $table->dropColumn('status');
+        });
+
+        $this->schema->table('users', function (Blueprint $table) {
+            $table->enum('status', ['active', 'banned'])->default('active');
+        });
+
+        $this->db->connection()->getPdo()->exec("UPDATE users SET status = _temp_column");
+
+        $this->schema->table('users', function (Blueprint $table) {
+            $table->dropColumn('_temp_column');
+        });
     }
 }
