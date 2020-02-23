@@ -10,7 +10,7 @@ use App\Models\Student;
 use Valitron\Validator;
 use App\Models\Organization;
 use App\Models\OrganizationCategory;
-use Cradle\View;active
+use Cradle\View;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -164,9 +164,20 @@ class Users extends Controller
         $user->save();
 
 
+        // Generate and save verification token.
+        $hex = bin2hex(random_bytes(64));
+        $verificationToken = '$' . '.' . $user->id . '.' . password_hash($hex, PASSWORD_DEFAULT) . '.' . $hex;
+
+        $this->db->table('user_verification_tokens')->insert([
+            'user_id' => $user->id,
+            'token' => $verificationToken,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+        ]);
+
+
         // Send activation email.
         $mail = $this->container->get('view')->clearViews()
-            ->addView(new View('email/welcome.twig', ['user' => $user]))
+            ->addView(new View('email/welcome.twig', ['user' => $user, 'token' => $verificationToken]))
             ->compileViews();
         if (!Email::send($this->container->get('mailer'), $user->email, 'Welcome To SaaS!', $mail)) { // An error occured
             $user->forceDelete();
