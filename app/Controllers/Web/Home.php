@@ -39,7 +39,8 @@ class Home extends Controller
         $userId = $query->select(['user_id'])->first()->user_id;
         $user = User::where('id', $userId)->where('status', 'pending');
         if ($user->count() != 1) { // If no valid user is not found.
-            throw new HttpNotFoundException($request);
+            $this->setHeader('Location', getenv('FRONTEND_URL') . '/dashboard');
+            return;
         }
 
         // Mark user as active
