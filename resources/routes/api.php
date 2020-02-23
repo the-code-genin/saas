@@ -22,9 +22,10 @@ $app->group('/api/v1', function (RouteCollectorProxy $group) use ($app) {
         $group->post('/login', Users::class.':login');
         $group->post('[/signup]', Users::class.':signup');
 
-        $group->group('', function(RouteCollectorProxy $group) { // Secure routes.
+        $group->group('', function(RouteCollectorProxy $group) { // Semi secure routes.
             $group->get('', Users::class.':index');
-        })->add(new UserAPIAuth($app));
+            $group->post('/verify', Users::class.':verify');
+        })->add(new UserAPIAuth($app, false));
     });
 
 
