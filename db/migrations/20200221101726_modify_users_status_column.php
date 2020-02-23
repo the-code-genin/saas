@@ -13,6 +13,7 @@ class ModifyUsersStatusColumn extends Migration
 
     public function down()
     {
+        $this->db->table('users')->where('status', 'pending')->update(['status' => 'active']);
         $this->db->connection()->getPdo()
             ->exec("ALTER TABLE `users` MODIFY COLUMN `status` ENUM('active','banned') DEFAULT 'active' NOT NULL;");
     }
