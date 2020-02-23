@@ -23,10 +23,14 @@ class UserAPIAuth extends MiddleWare
     /** @var Manager */
     protected $db;
 
-    public function __construct(App $app)
+    /** @var bool */
+    protected $verified;
+
+    public function __construct(App $app, bool $verified = true)
     {
         $this->app = $app;
         $this->db = $app->getContainer()->get('db');
+        $this->verified = $verified;
     }
 
     /**
@@ -83,7 +87,11 @@ class UserAPIAuth extends MiddleWare
                 break;
             }
             return $this->generateResponse($response);
+        } else if ($user->verified == false && $this->verified == true) { // If user must be verified to use this route
+            $response = Api::generateErrorResponse(401, 'AuthenticationError', 'User must be verified to use this route.');
+            return $this->generateResponse($response);
         }
+
 
         // Remove an expired token
         $date = $this->db->table('user_api_tokens')->where('token', $apiToken)->where('user_id', $userId)->first()->created_at;
@@ -94,7 +102,8 @@ class UserAPIAuth extends MiddleWare
             return $this->generateResponse($response);
         }
 
-        // Handle request.
+
+        // Handle request.
         $request = $request->withAttribute('user', $user)->withAttribute('auth_token', $apiToken);
         $response = $handler->handle($request);
         return $response;
