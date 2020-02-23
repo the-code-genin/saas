@@ -62,7 +62,7 @@ class UserAPIAuth extends MiddleWare
 
 
         // Validate token.
-        $userId = explode('.', $apiToken, 2)[1];
+        $userId = @explode('.', $apiToken, 2)[1];
         $user = User::where('id', $userId)->first();
         if (is_null($user)) { // If no user exists.
             $response = Api::generateErrorResponse(401, 'AuthenticationError', 'Invalid authorization token.');

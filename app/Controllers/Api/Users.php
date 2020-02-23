@@ -57,12 +57,25 @@ class Users extends Controller
             return Api::generateErrorResponse(401, 'AuthenticationError', array_shift($errors)[0]);
         }
 
-        // Authenticate user by email and password.
+        // Authenticate user by email, password and status.
         $user = User::where('email', $input->email)->first();
         if (is_null($user)) {
             return Api::generateErrorResponse(401, 'AuthenticationError', 'User email and password do not match.');
         } else if (!password_verify($input->password, $user->password)) {
             return Api::generateErrorResponse(401, 'AuthenticationError', 'User email and password do not match.');
+        } else if ($user->status != 'active') { // User is not active
+            switch ($user->status) {
+                case 'pending':
+                    $response = Api::generateErrorResponse(401, 'AuthenticationError', 'User has not verified their account');
+                break;
+                case 'banned':
+                    $response = Api::generateErrorResponse(401, 'AuthenticationError', 'User is unable to log in.');
+                break;
+                default:
+                    $response = Api::generateErrorResponse(500, 'ServerError', 'An error occured.');
+                break;
+            }
+            return $this->generateResponse($response);
         }
 
         // Generate and save api token.
