@@ -14,7 +14,7 @@ class User extends Model
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /** @var array */
-    protected $appends = ['user_type'];
+    protected $appends = ['user_type', 'verified'];
 
     /** @var array */
     protected $hidden = ['updated_at', 'deleted_at', 'remember_token', 'userable_id', 'userable_type', 'password', 'userable'];
@@ -34,6 +34,37 @@ class User extends Model
     }
 
     /**
+     * Get the verified attribute.
+     *
+     * @param mixed $value
+     *
+     * @return bool
+     */
+    public function getVerifiedAttribute($value): bool
+    {
+        if ($value == 'true') {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Set the verified attribute.
+     *
+     * @param bool $value
+     *
+     * @return void
+     */
+    public function setVerifiedAttribute(bool $value): void
+    {
+        if ($value) {
+            $this->attributes['verified'] = 'true';
+        }
+        $this->attributes['verified'] = 'false';
+    }
+
+    /**
      * Get the user type based on the userable property.
      *
      * @param mixed $value
@@ -41,7 +72,7 @@ class User extends Model
      */
     public function getUserTypeAttribute($value): string
     {
-        switch ($this->userable_type) {
+        switch ($this->attributes['userable_type']) {
             case Student::class:
                 $type = 'student';
             break;
