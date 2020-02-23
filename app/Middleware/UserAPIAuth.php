@@ -70,18 +70,31 @@ class UserAPIAuth extends MiddleWare
         } else if ($this->db->table('user_api_tokens')->where('token', $apiToken)->where('user_id', $userId)->count() != 1) {
             $response = Api::generateErrorResponse(401, 'AuthenticationError', 'Invalid authorization token.');
             return $this->generateResponse($response);
+        } else if ($user->status != 'active') { // User is not active
+            switch ($user->status) {
+                case 'pending':
+                    $response = Api::generateErrorResponse(401, 'AuthenticationError', 'User has not verified their account');
+                break;
+                case 'banned':
+                    $response = Api::generateErrorResponse(401, 'AuthenticationError', 'User is unable to log in.');
+                break;
+                default:
+                    $response = Api::generateErrorResponse(500, 'ServerError', 'An error occured.');
+                break;
+            }
+            return $this->generateResponse($response);
         }
 
         // Remove an expired token
         $date = $this->db->table('user_api_tokens')->where('token', $apiToken)->where('user_id', $userId)->first()->created_at;
         $createdAt = Carbon::createFromFormat('Y-m-d H:i:s', $date);
-        if (Carbon::now()->diffInDays($createdAt) >= 30) { // Expired token
+        if (Carbon::now()->diffInDays($createdAt) > 30) { // Expired token
             $this->db->table('user_api_tokens')->where('token', $apiToken)->where('user_id', $userId)->delete();
             $response = Api::generateErrorResponse(401, 'AuthenticationError', 'Expired authorization token.');
             return $this->generateResponse($response);
         }
 
-        // Handle request.
+        // Handle request.
         $request = $request->withAttribute('user', $user)->withAttribute('auth_token', $apiToken);
         $response = $handler->handle($request);
         return $response;
