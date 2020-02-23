@@ -75,7 +75,7 @@ class Users extends Controller
                     $response = Api::generateErrorResponse(500, 'ServerError', 'An error occured.');
                 break;
             }
-            return $this->generateResponse($response);
+            return $response;
         }
 
         // Generate and save api token.
