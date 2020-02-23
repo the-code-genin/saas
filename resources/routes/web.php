@@ -10,4 +10,4 @@ use App\Controllers\Web\Home;
  */
 
 $app->get('/', Home::class.':index');
-$app->get('/verify-account/{token:.+}', Home::class.':verifyUserAccount');
+$app->get('/verify-account/{token: .+}', Home::class.':verifyUserAccount');
