@@ -74,20 +74,10 @@ class UserAPIAuth extends MiddleWare
         } else if ($this->db->table('user_api_tokens')->where('token', $apiToken)->where('user_id', $userId)->count() != 1) {
             $response = Api::generateErrorResponse(401, 'AuthenticationError', 'Invalid authorization token.');
             return $this->generateResponse($response);
-        } else if ($user->status != 'active') { // User is not active
-            switch ($user->status) {
-                case 'pending':
-                    $response = Api::generateErrorResponse(401, 'AuthenticationError', 'User has not verified their account');
-                break;
-                case 'banned':
-                    $response = Api::generateErrorResponse(401, 'AuthenticationError', 'User is unable to log in.');
-                break;
-                default:
-                    $response = Api::generateErrorResponse(500, 'ServerError', 'An error occured.');
-                break;
-            }
-            return $this->generateResponse($response);
-        } else if ($user->verified == false && $this->verified == true) { // If user must be verified to use this route
+        } else if ($user->status == 'banned') { // User is banned
+            $response = Api::generateErrorResponse(401, 'AuthenticationError', 'User is unable to log in.');
+            return $response;
+        } else if ($this->verified == true && $user->verified == false) { // If user must be verified to use this route
             $response = Api::generateErrorResponse(401, 'AuthenticationError', 'User must be verified to use this route.');
             return $this->generateResponse($response);
         }
