@@ -42,7 +42,7 @@ class User extends Model
      */
     public function getVerifiedAttribute($value): bool
     {
-        if ($this->attributes['status'] == 'active') {
+        if ($this->status == 'active') {
             return true;
         }
 
