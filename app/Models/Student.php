@@ -22,6 +22,19 @@ class Student extends Model
     /** @var array */
     protected $hidden = ['id', 'updated_at', 'deleted_at'];
 
+
+    /**
+     * Get the student hourly rate
+     *
+     * @param mixed $value
+     *
+     * @return float
+     */
+    public function getHourlyRateAttribute($value): float
+    {
+        return (float) $this->attributes['hourly_rate'];
+    }
+
     /**
      * Get the user instance.
      *

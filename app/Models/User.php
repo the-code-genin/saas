@@ -17,7 +17,7 @@ class User extends Model
     protected $appends = ['user_type', 'verified'];
 
     /** @var array */
-    protected $hidden = ['updated_at', 'deleted_at', 'remember_token', 'userable_id', 'password', 'userable'];
+    protected $hidden = ['updated_at', 'deleted_at', 'remember_token', 'password', 'userable_id', 'userable', 'userable_type'];
 
     /**
      * Get array representation of the user.
