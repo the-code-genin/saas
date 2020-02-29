@@ -17,7 +17,7 @@ class User extends Model
     protected $appends = ['user_type', 'verified'];
 
     /** @var array */
-    protected $hidden = ['updated_at', 'deleted_at', 'remember_token', 'userable_id', 'userable_type', 'password', 'userable'];
+    protected $hidden = ['updated_at', 'deleted_at', 'remember_token', 'userable_id', 'password', 'userable'];
 
     /**
      * Get array representation of the user.
@@ -42,26 +42,11 @@ class User extends Model
      */
     public function getVerifiedAttribute($value): bool
     {
-        if ($value == 'true') {
+        if ($this->attributes['status'] == 'active') {
             return true;
         }
 
         return false;
-    }
-
-    /**
-     * Set the verified attribute.
-     *
-     * @param bool $value
-     *
-     * @return void
-     */
-    public function setVerifiedAttribute(bool $value): void
-    {
-        if ($value) {
-            $this->attributes['verified'] = 'true';
-        }
-        $this->attributes['verified'] = 'false';
     }
 
     /**
