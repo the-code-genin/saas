@@ -2,6 +2,7 @@
 
 use Slim\App;
 use App\Controllers\Api\Home;
+use App\Controllers\Api\Jobs;
 use App\Middleware\UserAPIAuth;
 use App\Middleware\CORSMiddleware;
 use App\Middleware\JSONBodyParser;
@@ -22,25 +23,34 @@ $app->group('/api/v1', function (RouteCollectorProxy $group) use ($app) {
         $group->post('/login', Users::class.':login');
         $group->post('[/signup]', Users::class.':signup');
 
-        $group->group('', function(RouteCollectorProxy $group) { // Semi secure routes.
+        // Semi secure routes.
+        $group->group('', function(RouteCollectorProxy $group) {
             $group->get('', Users::class.':index');
         })->add(new UserAPIAuth($app, false));
     });
 
-
     // Organizations end points.
-    $group->group('/organizations', function(RouteCollectorProxy $group) use ($app) {
+    $group->group('', function(RouteCollectorProxy $group) use ($app) {
 
-        // Organization categories endpoints.
-        $group->group('/categories', function(RouteCollectorProxy $group) use ($app) {
-            $group->get('[/[{id:\d*}]]', OrganizationCategories::class.':index');
+    });
 
-            $group->group('', function(RouteCollectorProxy $group) { // Secure routes.
-                $group->post('', OrganizationCategories::class.':create');
-                $group->map(['PUT', 'PATCH'], '/{id:\d+}', OrganizationCategories::class.':update');
-                $group->delete('/{id:\d+}', OrganizationCategories::class.':delete');
-            })->add(new UserAPIAuth($app));
-        });
+
+    // Organization categories endpoints.
+    $group->group('/organizations/categories', function(RouteCollectorProxy $group) use ($app) {
+        $group->get('[/[{id:\d*}]]', OrganizationCategories::class.':index');
+
+        // Secure routes.
+        $group->group('', function(RouteCollectorProxy $group) {
+            $group->post('', OrganizationCategories::class.':create');
+            $group->map(['PUT', 'PATCH'], '/{id:\d+}', OrganizationCategories::class.':update');
+            $group->delete('/{id:\d+}', OrganizationCategories::class.':delete');
+        })->add(new UserAPIAuth($app));
+    });
+
+
+    // Job routes.
+    $group->group('/jobs', function(RouteCollectorProxy $group) use ($app) {
+        $group->post('', Jobs::class.':create')->add(new UserAPIAuth($app, true, 'organization'));
     });
 
 
