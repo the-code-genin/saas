@@ -26,11 +26,15 @@ class UserAPIAuth extends MiddleWare
     /** @var bool */
     protected $verified;
 
-    public function __construct(App $app, bool $verified = true)
+    /** @var string */
+    protected $userType;
+
+    public function __construct(App $app, bool $verified = true, string $userType = '')
     {
         $this->app = $app;
         $this->db = $app->getContainer()->get('db');
         $this->verified = $verified;
+        $this->userType = $userType;
     }
 
     /**
@@ -79,6 +83,9 @@ class UserAPIAuth extends MiddleWare
             return $response;
         } else if ($this->verified == true && $user->verified == false) { // If user must be verified to use this route
             $response = Api::generateErrorResponse(401, 'AuthenticationError', 'User must be verified to use this route.');
+            return $this->generateResponse($response);
+        } else if (!empty($this->userType) && $user->user_type != $this->userType) { // If a particular user type is specified
+            $response = Api::generateErrorResponse(401, 'AuthenticationError', 'This user can not access this route.');
             return $this->generateResponse($response);
         }
 
