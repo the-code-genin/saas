@@ -1,0 +1,13 @@
+{% extends "email_base.twig" %}
+
+{% block content %}
+<h2>Hello, 
+    {% if user.user_type == 'student' %}
+        {{ user.userable.full_name }}
+    {% else %}
+        {{ user.userable.name }}
+    {% endif %}!
+</h2>
+<br>
+<p>You have successfully verified your account.</p>
+{% endblock %}

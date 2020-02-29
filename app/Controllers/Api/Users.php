@@ -207,36 +207,4 @@ class Users extends Controller
             'payload' => $payload
         ];
     }
-
-    /**
-     * Marks a user's profile as verified
-     *
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param object $params
-     *
-     * @return array
-     */
-    protected function verify(ServerRequestInterface $request, object $params): array
-    {
-        $user = $request->getAttribute('user');
-        $input = $request->getAttribute('body');
-        $validator = new Validator((array) $input);
-
-        /*
-        switch ($user->user_type) {
-            case 'student':
-            break;
-            case 'organization':
-            break;
-        }
-
-        $validator->rule('required', ['email', 'password']);
-        $validator->rule('email', 'email');
-        if (!$validator->validate()) { // Validation fails.
-            $errors = $validator->errors();
-            return Api::generateErrorResponse(401, 'AuthenticationError', array_shift($errors)[0]);
-        }
-        */
-        return [];
-    }
 }

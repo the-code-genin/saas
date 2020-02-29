@@ -3,6 +3,7 @@ namespace App\Controllers\Web;
 
 use Cradle\View;
 use App\Models\User;
+use App\Helpers\Email;
 use Cradle\Controller;
 use Slim\Exception\HttpNotFoundException;
 use Psr\Http\Message\ServerRequestInterface;
@@ -47,6 +48,12 @@ class Home extends Controller
         $user = $user->first();
         $user->status = 'active';
         $user->save();
+
+        // Send activation email.
+        $mail = $this->container->get('view')->clearViews()
+            ->addView(new View('email/verified.twig', ['user' => $user]))
+            ->compileViews();
+        Email::send($this->container->get('mailer'), $user->email, 'SaaS account verified!', $mail);
 
         // Redirect users to their dashboard on the frontend.
         $this->setHeader('Location', getenv('FRONTEND_URL') . '/dashboard');

@@ -24,7 +24,6 @@ $app->group('/api/v1', function (RouteCollectorProxy $group) use ($app) {
 
         $group->group('', function(RouteCollectorProxy $group) { // Semi secure routes.
             $group->get('', Users::class.':index');
-            $group->post('/verify', Users::class.':verify');
         })->add(new UserAPIAuth($app, false));
     });
 
