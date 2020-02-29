@@ -63,18 +63,8 @@ class Users extends Controller
             return Api::generateErrorResponse(401, 'AuthenticationError', 'User email and password do not match.');
         } else if (!password_verify($input->password, $user->password)) {
             return Api::generateErrorResponse(401, 'AuthenticationError', 'User email and password do not match.');
-        } else if ($user->status != 'active') { // User is not active
-            switch ($user->status) {
-                case 'pending':
-                    $response = Api::generateErrorResponse(401, 'AuthenticationError', 'User has not verified their account');
-                break;
-                case 'banned':
-                    $response = Api::generateErrorResponse(401, 'AuthenticationError', 'User is unable to log in.');
-                break;
-                default:
-                    $response = Api::generateErrorResponse(500, 'ServerError', 'An error occured.');
-                break;
-            }
+        } else if ($user->status == 'banned') { // User is banned
+            $response = Api::generateErrorResponse(401, 'AuthenticationError', 'User is unable to log in.');
             return $response;
         }
 
