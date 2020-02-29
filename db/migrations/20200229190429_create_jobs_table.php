@@ -9,7 +9,7 @@ class CreateJobsTable extends Migration
     {
         $this->schema->create('jobs', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('organization_id')->unsigned();
+            $table->integer('user_id')->unsigned();
             $table->string('title', '300');
             $table->text('description');
             $table->text('requirements');
@@ -21,9 +21,9 @@ class CreateJobsTable extends Migration
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('organization_id')
+            $table->foreign('user_id')
                 ->references('id')
-                ->on('organizations')
+                ->on('users')
                 ->onDelete('cascade');
         });
     }
