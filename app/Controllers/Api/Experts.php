@@ -32,7 +32,7 @@ class Experts extends Controller
             }
         } else { // If a list of experts is to be gotten
             if (isset($request->getQueryParams()['page']) || isset($request->getQueryParams()['perPage'])) { // If pagination is to be applied.
-                $page = $request->getQueryParams()['page'];
+                $page = isset($request->getQueryParams()['page']) ? $request->getQueryParams()['page'] : 1;
                 $perPage = isset($request->getQueryParams()['perPage']) ? $request->getQueryParams()['perPage'] : 10;
                 
                 /** @var Paginator */
