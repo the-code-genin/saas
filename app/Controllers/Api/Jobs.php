@@ -28,13 +28,15 @@ class Jobs extends Controller
                 return Api::generateErrorResponse(404, 'NotFoundError', 'The resource you requested for was not found.');
             }
         } else { // If a list of experts is to be gotten
+            $results = Job::with(['skills', 'organization']);
+
+            
             if (isset($request->getQueryParams()['page']) || isset($request->getQueryParams()['perPage'])) { // If pagination is to be applied.
                 $page = isset($request->getQueryParams()['page']) ? $request->getQueryParams()['page'] : 1;
                 $perPage = isset($request->getQueryParams()['perPage']) ? $request->getQueryParams()['perPage'] : 10;
 
                 /** @var Paginator */
-                $results = Job::with(['skills', 'organization'])
-                    ->paginate($perPage, ['*'], 'results', $page);
+                $results = $results->paginate($perPage, ['*'], 'results', $page);
 
                 $payload = [
                     'total' => $results->total(),
@@ -47,7 +49,6 @@ class Jobs extends Controller
                     'data' => $results->items(),
                 ];
             } else { // If all are to be gotten at once.
-                $results = Job::with(['skills', 'organization']);
                 $payload = [
                     'data' => $results->get(),
                     'total' => $results->count(),
