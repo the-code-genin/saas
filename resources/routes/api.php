@@ -46,13 +46,6 @@ $app->group('/api/v1', function (RouteCollectorProxy $group) use ($app) {
     // Organization categories endpoints.
     $group->group('/organizations/categories', function(RouteCollectorProxy $group) use ($app) {
         $group->get('[/[{id:\d*}]]', OrganizationCategories::class.':index');
-
-        // Secure routes.
-        $group->group('', function(RouteCollectorProxy $group) {
-            $group->post('', OrganizationCategories::class.':create');
-            $group->map(['PUT', 'PATCH'], '/{id:\d+}', OrganizationCategories::class.':update');
-            $group->delete('/{id:\d+}', OrganizationCategories::class.':delete');
-        })->add(new UserAPIAuth($app));
     });
 
 
