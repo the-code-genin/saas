@@ -1,5 +1,6 @@
 <?php
 
+use App\Controllers\Api\Experts;
 use Slim\App;
 use App\Controllers\Api\Home;
 use App\Controllers\Api\Jobs;
@@ -29,8 +30,15 @@ $app->group('/api/v1', function (RouteCollectorProxy $group) use ($app) {
         })->add(new UserAPIAuth($app, false));
     });
 
+
+    // Experts routes.
+    $group->group('/experts', function(RouteCollectorProxy $group) use ($app) {
+        $group->get('[/[{id:\d*}]]', Experts::class.':index');
+    })->add(new UserAPIAuth($app, false));
+
+
     // Organizations end points.
-    $group->group('', function(RouteCollectorProxy $group) use ($app) {
+    $group->group('/organizations', function(RouteCollectorProxy $group) use ($app) {
 
     });
 
@@ -50,6 +58,7 @@ $app->group('/api/v1', function (RouteCollectorProxy $group) use ($app) {
 
     // Job routes.
     $group->group('/jobs', function(RouteCollectorProxy $group) use ($app) {
+        $group->get('[/[{id:\d*}]]', Jobs::class.':index')->add(new UserAPIAuth($app, false));
         $group->post('', Jobs::class.':create')->add(new UserAPIAuth($app, true, 'organization'));
     });
 
