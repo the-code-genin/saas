@@ -23,6 +23,6 @@ class JobSkill extends Model
      */
     public function job(): BelongsTo
     {
-        return $this->belongsTo(Job::class, 'id', 'job_id');
+        return $this->belongsTo(Job::class, 'job_id', 'id');
     }
 }

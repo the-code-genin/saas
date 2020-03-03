@@ -40,7 +40,7 @@ class Organization extends Model
      */
     public function category(): BelongsTo
     {
-        return $this->belongsTo(OrganizationCategory::class, 'id', 'category_id');
+        return $this->belongsTo(OrganizationCategory::class, 'category_id', 'id');
     }
 
     /**

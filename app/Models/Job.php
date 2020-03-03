@@ -15,7 +15,7 @@ class Job extends Model
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /** @var array */
-    protected $hidden = ['updated_at', 'deleted_at'];
+    protected $hidden = ['updated_at', 'deleted_at', 'user_id'];
 
     /**
      * Get the organization that posted this job.
@@ -24,7 +24,7 @@ class Job extends Model
      */
     public function organization(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'id', 'user_id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     /**
