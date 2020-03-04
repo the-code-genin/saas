@@ -4,7 +4,9 @@ namespace App\Controllers\Api;
 use App\Helpers\Api;
 use App\Models\Job;
 use App\Models\JobSkill;
+use App\Models\Organization;
 use Cradle\Controller;
+use Illuminate\Database\Eloquent\Builder;
 use Valitron\Validator;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -24,12 +26,32 @@ class Jobs extends Controller
             $payload = [
                 'data' => Job::where('id', $params->id)->with(['skills', 'organization'])->first()
             ];
+
             if (is_null($payload['data'])) { // If the expert was not found
                 return Api::generateErrorResponse(404, 'NotFoundError', 'The resource you requested for was not found.');
             }
         } else { // If a list of experts is to be gotten
             $results = Job::with(['skills', 'organization']);
 
+            if (isset($request->getQueryParams()['skill'])) { // If a skill filter is set
+                $skill = $request->getQueryParams()['skill'];
+                $results = $results->whereHas('skills', function(Builder $skills) use ($skill) {
+                    $skills->where('name', 'LIKE', "%{$skill}%");
+                }, '>', 0);
+            }
+
+            if (isset($request->getQueryParams()['organization'])) { // If an organization filter is set
+                $organizationName = $request->getQueryParams()['organization'];
+                $results = $results->whereHas('organization', function(Builder $user) use ($organizationName) {
+                    $user->whereHasMorph(
+                        'userable',
+                        Organization::class, 
+                        function (Builder $organization) use ($organizationName) {
+                            $organization->where('name', 'LIKE', "%{$organizationName}%");
+                        }
+                    );
+                });
+            }
             
             if (isset($request->getQueryParams()['page']) || isset($request->getQueryParams()['perPage'])) { // If pagination is to be applied.
                 $page = isset($request->getQueryParams()['page']) ? $request->getQueryParams()['page'] : 1;
