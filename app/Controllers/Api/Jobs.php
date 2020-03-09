@@ -53,6 +53,11 @@ class Jobs extends Controller
                 });
             }
             
+            if (isset($request->getQueryParams()['category'])) { // If a category filter is set
+                $category = $request->getQueryParams()['category'];
+                $results = $results->where('category', 'LIKE', "%{$category}%");
+            }
+
             if (isset($request->getQueryParams()['page']) || isset($request->getQueryParams()['perPage'])) { // If pagination is to be applied.
                 $page = isset($request->getQueryParams()['page']) ? $request->getQueryParams()['page'] : 1;
                 $perPage = isset($request->getQueryParams()['perPage']) ? $request->getQueryParams()['perPage'] : 10;
