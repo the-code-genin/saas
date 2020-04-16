@@ -16,6 +16,6 @@ The api is currently hosted on [https://stuaas.herokuapp.com](https://stuaas.her
 
 - Download and place the applicaton's files in your web server's root directory.
 - Create a database for the app.
-- Run `composer setup`.
-- Run `composer migrate`.
-- Run `composer seed -s SeedOrganizationCategoriesTable`.
+- Run `php artisan app:setup`.
+- Run `php artisan key:generate`.
+- Run `php artisan app:refresh`.
