@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
+use App\Models\UserApiToken;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Model
+class User extends Authenticatable
 {
     use SoftDeletes;
 
@@ -70,7 +72,6 @@ class User extends Model
                 $type = 'unknown';
             break;
         }
-        
         return $type;
     }
 
@@ -82,5 +83,15 @@ class User extends Model
     public function userable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    public function tokens(): HasMany
+    {
+        return $this->hasMany(UserApiToken::class, 'user_id', 'id');
+    }
+
+    public function verificationTokens(): HasMany
+    {
+        return $this->hasMany(UserVerificationToken::class, 'user_id', 'id');
     }
 }

@@ -2,9 +2,8 @@
 
 namespace App\Helpers;
 
-/**
- * An helper for api methods.
- */
+use Illuminate\Validation\Validator;
+
 class Api
 {
     /**
@@ -25,5 +24,22 @@ class Api
                 'message' => $message,
             ]
         ];
+    }
+
+    /**
+     * Return the first validation error from a validator instance.
+     *
+     * @param \Illuminate\Validation\Validator $validator
+     *
+     * @return string|null
+     */
+    public static function getFirstValidationError(Validator $validator): ?string
+    {
+        if (!$validator->fails()) return null;
+
+        $errors = $validator->errors();
+        $fields = $errors->keys();
+
+        return $errors->first($fields[0]);
     }
 }

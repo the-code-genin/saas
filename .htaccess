@@ -1,3 +1,5 @@
+SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+
 RewriteEngine On
 
 # Serve the file if its a public asset file

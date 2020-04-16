@@ -1,43 +1,60 @@
 <?php
 
-use App\HTTPKernel;
-use Slim\Factory\ServerRequestCreatorFactory;
-use Slim\ResponseEmitter;
-
 /**
- * ------------------------------------------------------------------
- * Cradle
- * ------------------------------------------------------------------
+ * Laravel - A PHP Framework For Web Artisans
  *
- * Cradle is an MVC microframework for building web apps with PHP.
- *
- * It is made with the aim to help php developers avoid working with spaghetti code
- * and embrace the MVC software architecture in as little time as possible.
- * It is totally free to use and open source.
- *
- * @package Cradle
- * @version 1.0
- * @author Mohammed Adekunle (Iyiola) <adekunle3317@gmail.com>
+ * @package  Laravel
+ * @author   Taylor Otwell <taylor@laravel.com>
  */
 
+define('LARAVEL_START', microtime(true));
 
+/*
+|--------------------------------------------------------------------------
+| Register The Auto Loader
+|--------------------------------------------------------------------------
+|
+| Composer provides a convenient, automatically generated class loader for
+| our application. We just need to utilize it! We'll simply require it
+| into the script here so that we don't have to worry about manual
+| loading any of our classes later on. It feels great to relax.
+|
+*/
 
-// Bootstrap cradle
-$app = require_once dirname(__DIR__) . '/bootstrap.php';
+require __DIR__.'/../vendor/autoload.php';
 
+/*
+|--------------------------------------------------------------------------
+| Turn On The Lights
+|--------------------------------------------------------------------------
+|
+| We need to illuminate PHP development, so let us turn on the lights.
+| This bootstraps the framework and gets it ready for use, then it
+| will load up this application so that we can run it and send
+| the responses back to the browser and delight our users.
+|
+*/
 
-// Create request
-$requestFactory = ServerRequestCreatorFactory::create();
-$request = $requestFactory->createServerRequestFromGlobals();
+$app = require_once __DIR__.'/../bootstrap/app.php';
 
+/*
+|--------------------------------------------------------------------------
+| Run The Application
+|--------------------------------------------------------------------------
+|
+| Once we have the application, we can handle the incoming request
+| through the kernel, and send the associated response back to
+| the client's browser allowing them to enjoy the creative
+| and wonderful application we have prepared for them.
+|
+*/
 
-// Handle request
-$kernel = new HTTPKernel($app);
-$response = $kernel->handle($request);
+$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 
+$response = $kernel->handle(
+    $request = Illuminate\Http\Request::capture()
+);
 
-// Send response
-$responseEmitter = new ResponseEmitter();
-$responseEmitter->emit($response);
+$response->send();
 
-exit(0); // Exit successfully
+$kernel->terminate($request, $response);
