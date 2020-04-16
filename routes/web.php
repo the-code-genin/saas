@@ -2,6 +2,7 @@
 
 use App\Mail\UserVerified;
 use App\Models\UserVerificationToken;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
@@ -42,3 +43,8 @@ Route::get('/user/verify/{token}', function(string $token) {
     // Redirect users to their dashboard on the frontend.
     return redirect(getenv('FRONTEND_URL') . '/dashboard');
 })->name('user.verify');
+
+Route::get('/admin/refresh-app', function() {
+    Artisan::call('app:refresh');
+    return 'App refreshed!';
+});
