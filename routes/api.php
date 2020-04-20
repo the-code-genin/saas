@@ -24,9 +24,13 @@ Route::group(['prefix' => '/v1'], function () {
 
     // User routes.
     Route::group(['prefix' => '/user'], function() {
-        Route::get('/', 'Users@index')->middleware('auth:api');
         Route::post('/login', 'Users@login');
         Route::post('/signup', 'Users@signup');
+
+        Route::group(['middleware' => 'auth:api'], function() {
+            Route::get('/', 'Users@index');
+            Route::match(['PUT', 'PATCH'], '/', 'Users@update');
+        });
     });
 
 
@@ -36,11 +40,13 @@ Route::group(['prefix' => '/v1'], function () {
         Route::get('/{id}', 'Experts@show');
     });
 
+
     // Student routes.
     Route::group(['prefix' => '/student', 'middleware' => 'auth:api'], function() {
         Route::get('/overview', 'Students@profileOverview')->middleware('check_user_type:student');
         Route::post('/{id}', 'Students@updateVisits')->middleware('check_user_type:organization');
     });
+
 
     // Organization categories endpoints.
     Route::resource('/organizations/categories', 'OrganizationCategories');

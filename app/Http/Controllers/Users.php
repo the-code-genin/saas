@@ -166,4 +166,77 @@ class Users extends Controller
             ]
         ];
     }
+
+    /**
+     * Update a user's profile.
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return array
+     */
+    public function update(Request $request): array
+    {
+        $user = $request->user();
+        $input = collect($request->json()->all());
+
+        // Validate input.
+        $validator = Validator::make($request->json()->all(), [
+            'password' => 'nullable|min:6',
+            'phone_number' => 'nullable|phone_number',
+            'availability' => 'nullable|in:freelance,part_time',
+            'hourly_rate' => 'nullable|numeric',
+            'available_for_jobs' => 'nullable|in:true,false',
+            'proficiency' => 'nullable|in:beginner,intern,expert',
+            'name' => "nullable|unique:App\Models\Organization,name,{$user->id}",
+            'category_id' => 'nullable|exists:organization_categories,id',
+        ], [
+            'password.min' => 'Password must be at least 6 characters long.',
+            'phone_number.phone_number' => 'Phone number field must be a valid phone number.',
+            'availability.in' => 'Invalid value for availability.',
+            'hourly_rate.numeric' => 'Hourly rate must be numeric.',
+            'available_for_jobs.in' => 'Invalid value for availability for jobs.',
+            'proficiency.in' => 'Invalid value for proficiency.',
+            'name.unique' => 'This name has been taken.',
+            'category_id.exists' => 'This category does not exist.',
+        ]);
+
+        if ($validator->fails()) { // Validation fails.
+            return Api::generateErrorResponse(105, 'InvalidFormDataError', Api::getFirstValidationError($validator));
+        }
+
+        // Update user profile.
+        switch ($user->user_type) {
+            case 'student':
+                $user->userable->full_name = $input->retrieve('full_name', $user->userable->full_name);
+                $user->userable->availability = $input->retrieve('availability', $user->userable->availability);
+                $user->userable->hourly_rate = $input->retrieve('hourly_rate', $user->userable->hourly_rate);
+                $user->userable->cv = $input->retrieve('cv', $user->userable->cv);
+                $user->userable->available_for_jobs = $input->retrieve('available_for_jobs', $user->userable->available_for_jobs);
+                $user->userable->proficiency = $input->retrieve('proficiency', $user->userable->proficiency);
+            break;
+
+            case 'organization':
+                $user->userable->name = $input->retrieve('name', $user->userable->name);
+                $user->userable->description = $input->retrieve('description', $user->userable->description);
+                $user->userable->category_id = $input->retrieve('category_id', $user->userable->category_id);
+            break;
+        }
+
+        if (!empty($request->json('password'))) $user->password = password_hash($request->json('password'), PASSWORD_DEFAULT);
+        $user->address = $input->retrieve('address', $user->address);
+        $user->phone_number = $input->retrieve('phone_number', $user->phone_number);
+        $user->profile_image = $input->retrieve('profile_image', $user->profile_image);
+        $user->bio = $input->retrieve('bio', $user->bio);
+
+        $user->userable->save();
+        $user->save();
+
+        // Response.
+        return [
+            'success' => true,
+            'payload' => [
+                'data' => $user->refresh(),
+            ]
+        ];
+    }
 }
