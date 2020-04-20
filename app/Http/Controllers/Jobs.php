@@ -51,6 +51,10 @@ class Jobs extends Controller
             $results = $results->where('category', 'LIKE', "%{$category}%");
         }
 
+        if (!empty($request->get('status'))) {
+            $results = $results->where('status', $request->get('status'));
+        }
+
         if (!empty($request->get('page')) || !empty($request->get('perPage'))) { // If pagination is to be applied.
             $page = $request->get('page', 1);
             $perPage = $request->get('perPage', 10);
