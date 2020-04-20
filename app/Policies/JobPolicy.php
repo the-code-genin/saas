@@ -53,7 +53,7 @@ class JobPolicy
      */
     public function update(User $user, Job $job)
     {
-        return $user->userable->jobs()->where('id', $job->id)->count() == 1;
+        return $user->userable->jobs()->where('jobs.id', $job->id)->count() == 1;
     }
 
     /**

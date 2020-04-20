@@ -59,7 +59,7 @@ class Organizations extends Controller
      */
     public function closeJob(Request $request, Job $job): array
     {
-        if ($request->user()->can('update', $job)) {
+        if (!$request->user()->can('update', $job)) {
             return Api::generateErrorResponse(401, 'AuthenticationError', 'You can not modify the job.');
         }
 
@@ -70,7 +70,7 @@ class Organizations extends Controller
         return [
             'success' => true,
             'payload' => [
-                'data' => $job->reload()
+                'data' => $job->refresh()->id
             ]
         ];
     }
