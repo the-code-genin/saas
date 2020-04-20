@@ -7,6 +7,7 @@ use App\Models\StudentSkill;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Student extends Model
@@ -91,5 +92,15 @@ class Student extends Model
     public function skills(): HasMany
     {
         return $this->hasMany(StudentSkill::class, 'student_id', 'id');
+    }
+
+    /**
+     * Get the views for the student profile.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function views(): HasManyThrough
+    {
+        return $this->hasManyThrough(StudentProfileView::class, User::class, 'userable_id', 'student_id');
     }
 }
