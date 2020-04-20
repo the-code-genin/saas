@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Resource controller for experts.
@@ -97,6 +98,7 @@ class Experts extends Controller
     {
         $expert = User::where('id', $id)
             ->where('userable_type', Student::class)
+            ->with('userable.skills')
             ->first();
 
         if (is_null($expert)) { // If the expert was not found
