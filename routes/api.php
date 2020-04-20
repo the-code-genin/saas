@@ -53,6 +53,7 @@ Route::group(['prefix' => '/v1'], function () {
 
     Route::group(['prefix' => '/company', 'middleware' => ['auth:api', 'check_user_type:organization']], function() {
         Route::get('/jobs', 'Organizations@jobs');
+        Route::post('/jobs/close/{job}', 'Organizations@closeJob');
     });
 
 

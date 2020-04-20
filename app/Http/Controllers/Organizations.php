@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Job;
+use App\Helpers\Api;
 use Illuminate\Http\Request;
 
 class Organizations extends Controller
@@ -45,6 +46,32 @@ class Organizations extends Controller
         return [
             'success' => true,
             'payload' => $payload
+        ];
+    }
+
+    /**
+     * Close a job.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Job $job
+     *
+     * @return array
+     */
+    public function closeJob(Request $request, Job $job): array
+    {
+        if ($request->user()->can('update', $job)) {
+            return Api::generateErrorResponse(401, 'AuthenticationError', 'You can not modify the job.');
+        }
+
+        // Close the job.
+        $job->status = 'closed';
+        $job->save();
+
+        return [
+            'success' => true,
+            'payload' => [
+                'data' => $job->reload()
+            ]
         ];
     }
 }
