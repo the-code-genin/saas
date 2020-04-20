@@ -16,7 +16,7 @@ class Organizations extends Controller
      */
     public function jobs(Request $request): array
     {
-        $results = $request->user()->jobs()->with('skills');
+        $results = $request->user()->userable->jobs()->with('skills');
 
         if (!empty($request->get('page')) || !empty($request->get('perPage'))) { // If pagination is to be applied.
             $page = $request->get('page', 1);
