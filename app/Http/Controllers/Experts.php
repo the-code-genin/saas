@@ -22,7 +22,40 @@ class Experts extends Controller
      */
     public function index(Request $request): array
     {
-        $results = User::select(['*'])->where('userable_type', Student::class);
+        $results = User::select(['*'])
+            ->where('userable_type', Student::class)
+            ->with('userable.skills');
+
+        if (!empty($request->get('skill'))) { // If a skill filter is set
+            $skill = $request->get('skill');
+            $results = $results->whereHasMorph('userable', [Student::class], function(Builder $student) use ($skill) {
+                $student->whereHas('skills', function(Builder $skills) use ($skill) {
+                    $skills->where('name', 'LIKE', "%{$skill}%");
+                });
+            }, '>', 0);
+        }
+
+        if (!empty($request->get('availability'))) { // If an availability filter is set
+            $availability = $request->get('availability');
+            $results = $results->whereHasMorph('userable', [Student::class], function(Builder $student) use ($availability) {
+                $student->where('availability', 'LIKE', "%{$availability}%");
+            });
+        }
+
+        if (!empty($request->get('range'))) { // If hourly range filter is set
+            $range = explode(',', $request->get('range'), 2);
+            $valid = true;
+            foreach ($range as $value) {
+                if (!preg_match('/\d+/', $value)) $valid = false;
+            }
+
+            if ($valid) {
+                $results = $results->whereHasMorph('userable', [Student::class], function(Builder $student) use ($range) {
+                    $student->where('hourly_rate', '>=', $range[0]);
+                    if (count($range) > 1) $student->where('hourly_rate', '<=', $range[1]);
+                });
+            }
+        }
 
         if (!empty($request->get('page')) || !empty($request->get('perPage'))) { // If pagination is to be applied.
             $page = $request->get('page', 1);
