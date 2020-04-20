@@ -12,6 +12,22 @@ use App\Models\StudentProfileView;
 class Students extends Controller
 {
     /**
+     * Get profile overview for a student.
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return array
+     */
+    public function profileOverview(Request $request): array
+    {
+        // Response
+        return [
+            'success' => true,
+            'payload' => []
+        ];
+    }
+
+    /**
      * update profile visits for a student.
      *
      * @param \Illuminate\Http\Request $request
@@ -19,7 +35,7 @@ class Students extends Controller
      *
      * @return void
      */
-    public function updateVisits(Request $request, int $id)
+    public function updateVisits(Request $request, int $id): array
     {
         $student = User::where('id', $id)
             ->where('userable_type', Student::class)
