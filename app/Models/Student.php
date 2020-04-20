@@ -19,6 +19,8 @@ class Student extends Model
         'hourly_rate' => 'float',
     ];
 
+    protected $touches = ['user'];
+
     /** @var array */
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 

@@ -13,6 +13,8 @@ class Organization extends Model
 {
     use SoftDeletes;
 
+    protected $touches = ['user'];
+
     /** @var array */
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
