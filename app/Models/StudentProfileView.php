@@ -15,7 +15,7 @@ class StudentProfileView extends Model
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /** @var array */
-    protected $hidden = ['updated_at', 'deleted_at', 'student_id', 'created_at'];
+    protected $hidden = ['updated_at', 'deleted_at', 'student_id', 'organization_id', 'created_at'];
 
     /**
      * Get the view student object.

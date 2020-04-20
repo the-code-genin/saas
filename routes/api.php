@@ -36,6 +36,10 @@ Route::group(['prefix' => '/v1'], function () {
         Route::get('/{id}', 'Experts@show');
     });
 
+    // Student routes.
+    Route::group(['prefix' => '/student', 'middleware' => 'auth:api'], function() {
+        Route::get('/{id}', 'Students@updateVisits')->middleware('check_user_type:organization');
+    });
 
     // Organization categories endpoints.
     Route::resource('/organizations/categories', 'OrganizationCategories');
