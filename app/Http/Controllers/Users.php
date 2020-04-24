@@ -213,6 +213,7 @@ class Users extends Controller
                 $user->userable->cv = $input->retrieve('cv', $user->userable->cv);
                 $user->userable->available_for_jobs = $input->retrieve('available_for_jobs', $user->userable->available_for_jobs);
                 $user->userable->proficiency = $input->retrieve('proficiency', $user->userable->proficiency);
+                $user->userable->bio = $input->retrieve('bio', $user->userable->bio);
             break;
 
             case 'organization':
@@ -226,7 +227,6 @@ class Users extends Controller
         $user->address = $input->retrieve('address', $user->address);
         $user->phone_number = $input->retrieve('phone_number', $user->phone_number);
         $user->profile_image = $input->retrieve('profile_image', $user->profile_image);
-        $user->bio = $input->retrieve('bio', $user->bio);
 
         $user->userable->save();
         $user->save();

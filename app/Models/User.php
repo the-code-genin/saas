@@ -6,6 +6,7 @@ use App\Models\UserApiToken;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -81,7 +82,7 @@ class User extends Authenticatable
      *
      * @return void
      */
-    public function userable(): MorphTotable_schema
+    public function userable(): MorphTo
     {
         return $this->morphTo();
     }
