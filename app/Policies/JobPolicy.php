@@ -23,13 +23,13 @@ class JobPolicy
     }
 
     /**
-     * Determine whether the user can view the model.
+     * Determine whether the user can view the model's applications.
      *
      * @param  \App\Models\User  $user
      * @param  \App\Models\Job  $job
      * @return mixed
      */
-    public function view(User $user, Job $job)
+    public function viewApplications(User $user, Job $job)
     {
         //
     }
