@@ -211,7 +211,7 @@ class Users extends Controller
                 $user->userable->availability = $input->retrieve('availability', $user->userable->availability);
                 $user->userable->hourly_rate = $input->retrieve('hourly_rate', $user->userable->hourly_rate);
                 $user->userable->cv = $input->retrieve('cv', $user->userable->cv);
-                $user->userable->available_for_job = $input->retrieve('available_for_jobs', $user->userable->available_for_job);
+                $user->userable->available_for_job = $input->retrieve('available_for_job', $user->userable->available_for_job);
                 $user->userable->proficiency = $input->retrieve('proficiency', $user->userable->proficiency);
                 $user->userable->bio = $input->retrieve('bio', $user->userable->bio);
             break;

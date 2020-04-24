@@ -45,29 +45,9 @@ class Student extends Model
      *
      * @param mixed $value
      *
-     * @return void
-     */
-    public function setAvailableForJobsAttribute($value): void
-    {
-        switch ($value) {
-            case true:
-                $this->attributes['available_for_job'] = 'true';
-            break;
-
-            case false:
-                $this->attributes['available_for_job'] = 'false';
-            break;
-        }
-    }
-
-    /**
-     * Get the verified attribute.
-     *
-     * @param mixed $value
-     *
      * @return bool
      */
-    public function getAvailableForJobsAttribute($value): bool
+    public function getAvailableForJobAttribute($value): bool
     {
         if ($value == 'true') {
             return true;
