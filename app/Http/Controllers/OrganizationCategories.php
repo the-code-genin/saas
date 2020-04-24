@@ -19,31 +19,7 @@ class OrganizationCategories extends Controller
      */
     public function index(Request $request): array
     {
-        if (!empty($request->get('page', null)) || !empty($request->get('perPage'))) { // If pagination is to be applied.
-            $page = $request->get('page', 1);
-            $perPage = $request->get('perPage', 10);
-
-            /** @var Paginator */
-            $results = OrganizationCategory::paginate($perPage, ['id', 'name'], 'results', $page);
-
-            $payload = [
-                'total' => $results->total(),
-                'per_page' => $results->perPage(),
-                'current_page' => $results->currentPage(),
-                'prev_page' => ($results->currentPage() > 1) ? $results->lastPage() : null,
-                'next_page' => $results->hasMorePages() ? ($results->currentPage() + 1) : null,
-                'from' => $results->firstItem(),
-                'to' => $results->lastItem(),
-                'data' => $results->items(),
-            ];
-        } else { // If all are to be gotten at once.
-            $results = OrganizationCategory::select(['id', 'name']);
-
-            $payload = [
-                'data' => $results->get(),
-                'total' => $results->count(),
-            ];
-        }
+        $payload = Api::getPayload($request, OrganizationCategory::select('*'));
 
         return [
             'success' => true,
