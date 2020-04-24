@@ -30,7 +30,7 @@ Route::get('/user/verify/{token}', function(string $token) {
     // Verify user exists
     $user = $verificationToken->user;
     if ($user->status != 'pending') { // If no valid user is not found.
-        return redirect(getenv('FRONTEND_URL') . '/dashboard');
+        return redirect(getenv('FRONTEND_URL') . '/login.html');
     }
 
     // Mark user as active
@@ -41,10 +41,14 @@ Route::get('/user/verify/{token}', function(string $token) {
     Mail::to($user)->send(new UserVerified($user));
 
     // Redirect users to their dashboard on the frontend.
-    return redirect(getenv('FRONTEND_URL') . '/dashboard');
+    return redirect(getenv('FRONTEND_URL') . '/login.html');
 })->name('user.verify');
 
 Route::get('/admin/refresh-app', function() {
+    if (env('APP_ENV') != 'local') {
+        return 'App is not in local mode.';
+    }
+
     Artisan::call('app:refresh');
     return 'App refreshed!';
 });
