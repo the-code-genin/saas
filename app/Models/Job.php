@@ -38,4 +38,14 @@ class Job extends Model
     {
         return $this->hasMany(JobSkill::class, 'job_id', 'id');
     }
+
+    /**
+     * Get all job applications.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function applications(): HasMany
+    {
+        return $this->hasMany(JobApplication::class, 'job_id', 'id');
+    }
 }
