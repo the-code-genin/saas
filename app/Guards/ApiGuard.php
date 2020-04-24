@@ -42,7 +42,7 @@ class ApiGuard implements Guard
             return null;
         }
 
-        if (!preg_match('/^(\$\.\d+\.(.+))$/i', $token, $matches)) {
+        if (!preg_match('/^(\d+\.(.+))$/i', $token, $matches)) {
             return null;
         }
 
@@ -63,7 +63,7 @@ class ApiGuard implements Guard
                 return false;
             }
 
-            $userId = @explode('.', $apiToken, 2)[1];
+            $userId = @explode('.', $apiToken, 2)[0];
 
             /** @var User */
             if (is_null($user = $this->provider->retrieveById($userId))) { // If no user exists.

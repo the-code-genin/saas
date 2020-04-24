@@ -64,9 +64,8 @@ class Users extends Controller
         }
 
         // Generate and save api token.
-        $hex = bin2hex(random_bytes(64));
         $apiToken = new UserApiToken();
-        $apiToken->token = '$' . '.' . $user->id . '.' . password_hash($hex, PASSWORD_DEFAULT) . '.' . $hex;
+        $apiToken->token = $user->id . '.' . bin2hex(random_bytes(120));
         $user->tokens()->save($apiToken);
 
         // Response.
