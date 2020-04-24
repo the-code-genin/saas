@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\AuthenticationError;
 use App\Models\Job;
 use App\Helpers\Api;
 use Illuminate\Http\Request;
@@ -19,29 +20,7 @@ class Organizations extends Controller
     {
         $results = $request->user()->userable->jobs()->with('skills');
 
-        if (!empty($request->get('page')) || !empty($request->get('perPage'))) { // If pagination is to be applied.
-            $page = $request->get('page', 1);
-            $perPage = $request->get('perPage', 10);
-
-            /** @var Paginator */
-            $results = $results->paginate($perPage, ['*'], 'results', $page);
-
-            $payload = [
-                'total' => $results->total(),
-                'per_page' => $results->perPage(),
-                'current_page' => $results->currentPage(),
-                'prev_page' => ($results->currentPage() > 1) ? $results->lastPage() : null,
-                'next_page' => $results->hasMorePages() ? ($results->currentPage() + 1) : null,
-                'from' => $results->firstItem(),
-                'to' => $results->lastItem(),
-                'data' => $results->items(),
-            ];
-        } else { // If all are to be gotten at once.
-            $payload = [
-                'data' => $results->get(),
-                'total' => $results->count(),
-            ];
-        }
+        $payload = Api::getPayload($request, $results);
 
         return [
             'success' => true,
@@ -60,7 +39,7 @@ class Organizations extends Controller
     public function closeJob(Request $request, Job $job): array
     {
         if (!$request->user()->can('update', $job)) {
-            return Api::generateErrorResponse(401, 'AuthenticationError', 'You can not modify the job.');
+            throw new AuthenticationError('You can not close the job.');
         }
 
         // Close the job.
@@ -71,6 +50,23 @@ class Organizations extends Controller
             'success' => true,
             'payload' => [
                 'data' => $job->refresh()->id
+            ]
+        ];
+    }
+
+    /**
+     * Get all applications for a job.
+     *
+     * @param Job $job
+     *
+     * @return array
+     */
+    public function jobApplications(Job $job): array
+    {
+        return [
+            'success' => true,
+            'payload' => [
+                'data' => null
             ]
         ];
     }

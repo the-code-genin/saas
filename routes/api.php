@@ -15,10 +15,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/unauthorized', function() {
-    return Api::generateErrorResponse(401, 'AuthenticationError', 'User  is not authorized.');
-})->name('user.unauthorized');
-
 
 Route::group(['prefix' => '/v1'], function () {
 
@@ -37,23 +33,24 @@ Route::group(['prefix' => '/v1'], function () {
     // Experts routes.
     Route::group(['prefix' => '/experts', 'middleware' => 'auth:api'], function() {
         Route::get('/', 'Experts@index');
-        Route::get('/{id}', 'Experts@show');
+        Route::get('/{expert}', 'Experts@show');
     });
 
 
     // Student routes.
     Route::group(['prefix' => '/student', 'middleware' => 'auth:api'], function() {
-        Route::post('/{id}', 'Students@updateVisits')->middleware('check_user_type:organization');
+        Route::post('/{student}', 'Students@updateVisits')->middleware('check_user_type:organization');
 
         Route::group(['middleware' => 'check_user_type:student'], function() {
             Route::get('/overview', 'Students@profileOverview');
-            Route::post('/apply/{id}', 'Students@applyForJob')->middleware('check_user_verified');
+            Route::post('/apply/{job}', 'Students@applyForJob')->middleware('check_user_verified');
         });
     });
 
 
     Route::group(['prefix' => '/company', 'middleware' => ['auth:api', 'check_user_type:organization']], function() {
         Route::get('/jobs', 'Organizations@jobs');
+        Route::get('/jobs/applications/{job}', 'Organizations@jobApplications');
         Route::post('/jobs/close/{job}', 'Organizations@closeJob');
     });
 
@@ -65,7 +62,7 @@ Route::group(['prefix' => '/v1'], function () {
     // Job routes.
     Route::group(['prefix' => '/jobs', 'middleware' => 'auth:api'], function() {
         Route::get('/', 'Jobs@index');
-        Route::get('/{id}', 'Jobs@show');
+        Route::get('/{job}', 'Jobs@show');
         Route::post('/', 'Jobs@create')->middleware('check_user_type:organization', 'check_user_verified');
     });
 
