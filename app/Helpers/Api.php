@@ -2,8 +2,8 @@
 
 namespace App\Helpers;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Illuminate\Validation\Validator;
 
 class Api
@@ -49,11 +49,11 @@ class Api
      * Generate API payload.
      *
      * @param \Illuminate\Http\Request $request
-     * @param Collection $results
+     * @param Builder $results
      *
      * @return array
      */
-    public static function getPayload(Request $request, Collection $results): array
+    public static function getPayload(Request $request, Builder $results): array
     {
         $payload = [];
 
