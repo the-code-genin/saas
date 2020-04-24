@@ -3,14 +3,15 @@
 namespace App\Models;
 
 use App\Models\UserApiToken;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
     use SoftDeletes;
+    use Notifiable;
 
     /** @var array */
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
@@ -80,7 +81,7 @@ class User extends Authenticatable
      *
      * @return void
      */
-    public function userable(): MorphTo
+    public function userable(): MorphTotable_schema
     {
         return $this->morphTo();
     }
