@@ -24,7 +24,7 @@ Route::get('/', function () {
 Route::get('/user/verify/{token}', function(string $token) {
     $verificationToken = UserVerificationToken::where('token', $token)->first();
     if (is_null($verificationToken)) { // If the token is not found.
-        return redirect('404');
+        abort(404);
     }
 
     // Verify user exists
