@@ -53,7 +53,7 @@ class Api
      *
      * @return array
      */
-    public static function getPayload(Request $request, Builder $results): array
+    public static function getPayload(Request $request, $results): array
     {
         $payload = [];
 
