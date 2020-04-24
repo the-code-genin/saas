@@ -18,7 +18,7 @@
 <br>
 
 <p>
-    <a href="{{ route('user.unauthorized', ['token' => $token->token]) }}">
+    <a href="{{ route('user.verified', ['token' => $token->token]) }}">
         Verify your account.
     </a>
 </p>
