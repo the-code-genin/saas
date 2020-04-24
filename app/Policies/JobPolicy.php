@@ -12,17 +12,6 @@ class JobPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any models.
-     *
-     * @param  \App\Models\User  $user
-     * @return mixed
-     */
-    public function viewAny(User $user)
-    {
-        //
-    }
-
-    /**
      * Determine whether the user can view the model's applications.
      *
      * @param  \App\Models\User  $user
@@ -31,7 +20,7 @@ class JobPolicy
      */
     public function viewApplications(User $user, Job $job)
     {
-        //
+        return $user->userable->jobs()->where('jobs.id', $job->id)->count() == 1;
     }
 
     /**
@@ -82,18 +71,6 @@ class JobPolicy
     }
 
     /**
-     * Determine whether the user can restore the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Job  $job
-     * @return mixed
-     */
-    public function restore(User $user, Job $job)
-    {
-        //
-    }
-
-    /**
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
@@ -102,6 +79,6 @@ class JobPolicy
      */
     public function forceDelete(User $user, Job $job)
     {
-        return $user->userable->jobs()->where('id', $job->id)->count() == 1;
+        return $this->delete($user, $job);
     }
 }
