@@ -47,6 +47,7 @@ Route::group(['prefix' => '/v1'], function () {
 
         Route::group(['middleware' => 'check_user_type:student'], function() {
             Route::get('/overview', 'Students@profileOverview');
+            Route::post('/apply/{id}', 'Students@applyForJob')->middleware('check_user_verified');
         });
     });
 
