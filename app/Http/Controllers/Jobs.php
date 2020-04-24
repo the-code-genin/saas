@@ -7,6 +7,7 @@ use App\Models\JobSkill;
 use App\Models\Organization;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Exceptions\InvalidFormDataError;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Validator;
 
@@ -55,29 +56,7 @@ class Jobs extends Controller
             $results = $results->where('status', $request->get('status'));
         }
 
-        if (!empty($request->get('page')) || !empty($request->get('perPage'))) { // If pagination is to be applied.
-            $page = $request->get('page', 1);
-            $perPage = $request->get('perPage', 10);
-
-            /** @var Paginator */
-            $results = $results->paginate($perPage, ['*'], 'results', $page);
-
-            $payload = [
-                'total' => $results->total(),
-                'per_page' => $results->perPage(),
-                'current_page' => $results->currentPage(),
-                'prev_page' => ($results->currentPage() > 1) ? $results->lastPage() : null,
-                'next_page' => $results->hasMorePages() ? ($results->currentPage() + 1) : null,
-                'from' => $results->firstItem(),
-                'to' => $results->lastItem(),
-                'data' => $results->items(),
-            ];
-        } else { // If all are to be gotten at once.
-            $payload = [
-                'data' => $results->get(),
-                'total' => $results->count(),
-            ];
-        }
+        $payload = Api::getPayload($request, $results);
 
         return [
             'success' => true,
@@ -88,22 +67,16 @@ class Jobs extends Controller
     /**
      * Get a single job.
      *
-     * @param int $id
+     * @param Job $job
      *
      * @return array
      */
-    public function show(int $id): array
+    public function show(Job $job): array
     {
-        $job = Job::where('id', $id)->with(['skills', 'organization'])->first();
-
-        if (is_null($job)) { // If the expert was not found
-            return Api::generateErrorResponse(404, 'NotFoundError', 'The resource you requested for was not found.');
-        }
-
         return [
             'success' => true,
             'payload' => [
-                'data' => $job
+                'data' => $job->load(['skills', 'organization'])
             ]
         ];
     }
@@ -134,7 +107,7 @@ class Jobs extends Controller
         ]);
 
         if ($validator->fails()) { // Validation fails.
-            return Api::generateErrorResponse(105, 'InvalidFormDataError', Api::getFirstValidationError($validator));
+            throw new InvalidFormDataError(Api::getFirstValidationError($validator));
         }
 
         // Create the job.
