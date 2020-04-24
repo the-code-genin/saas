@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Job;
 use App\Models\User;
+use App\Models\Student;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class JobPolicy
@@ -57,6 +58,18 @@ class JobPolicy
     }
 
     /**
+     * Determine whether the user can apply for the job.
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Job  $job
+     * @return mixed
+     */
+    public function apply(User $user, Job $job)
+    {
+        return ($job->status == 'open' && $user->verified == true && $user->userable_type == Student::class);
+    }
+
+    /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
@@ -89,6 +102,6 @@ class JobPolicy
      */
     public function forceDelete(User $user, Job $job)
     {
-        //
+        return $user->userable->jobs()->where('id', $job->id)->count() == 1;
     }
 }
