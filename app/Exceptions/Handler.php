@@ -53,7 +53,7 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $exception)
     {
         if (preg_match('/(.*)\/api\/(.*)/i', $request->fullUrl())) { // API request.
-            return Api::generateErrorResponse($exception->getCode(), (new ReflectionClass($exception))->getShortName(), $exception->getMessage());
+            return Api::generateErrorResponse($exception->getCode() | 404, (new ReflectionClass($exception))->getShortName(), $exception->getMessage());
         }
 
         return parent::render($request, $exception);
