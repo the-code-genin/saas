@@ -121,7 +121,7 @@ class Jobs extends Controller
         $validator = Validator::make($request->json()->all(), [
             'title' => 'required',
             'description' => 'required',
-            'requirements' => 'required',
+            'requirement' => 'required',
             'location' => 'required',
             'about_position' => 'required',
             'duties' => 'required',
@@ -142,7 +142,7 @@ class Jobs extends Controller
         $job->user_id = $request->user()->id;
         $job->title = $request->json('title');
         $job->description = $request->json('description');
-        $job->requirements = $request->json('requirements');
+        $job->requirement = $request->json('requirement');
         $job->location = $request->json('location');
         $job->about_position = $request->json('about_position');
         $job->duties = $request->json('duties');
