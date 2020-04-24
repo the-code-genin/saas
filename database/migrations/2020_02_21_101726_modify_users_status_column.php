@@ -10,7 +10,7 @@ class ModifyUsersStatusColumn extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->enum('_temp_column', ['active', 'banned']);
+            $table->enum('_temp_column', ['active', 'banned'])->nullable();
         });
 
         DB::update("UPDATE users SET _temp_column = status");
@@ -34,7 +34,7 @@ class ModifyUsersStatusColumn extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->enum('_temp_column', ['active', 'banned', 'pending']);
+            $table->enum('_temp_column', ['active', 'banned', 'pending'])->nullable();
         });
 
         DB::update("UPDATE users SET _temp_column = status");
