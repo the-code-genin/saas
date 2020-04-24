@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Helpers\Api;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -50,6 +51,10 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        if (preg_match('/(.*)\/api\/(.*)/i', $request->fullUrl())) { // API request.
+            return Api::generateErrorResponse($exception->getCode(), get_class($exception), $exception->getMessage());
+        }
+
         return parent::render($request, $exception);
     }
 }
