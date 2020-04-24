@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use App\Models\StudentProfileView;
 use App\Http\Controllers\Controller;
 use App\Models\JobApplication;
+use App\Notifications\StudentApplicationSubmitted;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
 
 class Students extends Controller
@@ -100,6 +102,8 @@ class Students extends Controller
         $application->student_id = $request->user()->id;
         $job->applications()->save($application);
 
+        // Send notifications to the organization and student.
+        Notification::send([$request->user(), $job->organization], new StudentApplicationSubmitted($application));
 
         // Response.
         return [
