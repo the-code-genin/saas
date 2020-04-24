@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Exceptions\AuthenticationError;
 use Closure;
 use App\Helpers\Api;
 
@@ -18,7 +19,7 @@ class CheckUserType
     public function handle($request, Closure $next, string $type)
     {
         if ($request->user()->user_type != $type) {
-            return Api::generateErrorResponse(401, 'AuthenticationError', 'This user can not access this route.');
+            throw new AuthenticationError('This user can not access this route.');
         }
 
         return $next($request);

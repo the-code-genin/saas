@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use App\Helpers\Api;
+use App\Exceptions\AuthenticationError;
 
 class CheckUserVerified
 {
@@ -17,7 +18,7 @@ class CheckUserVerified
     public function handle($request, Closure $next)
     {
         if ($request->user()->verified == false) {
-            return Api::generateErrorResponse(401, 'AuthenticationError', 'User must be verified to use this route.');
+            throw new AuthenticationError('User must be verified to use this route.');
         }
 
         return $next($request);
