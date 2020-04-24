@@ -4,13 +4,15 @@ namespace App\Http\Controllers;
 use App\Helpers\Api;
 use App\Models\User;
 use App\Models\Student;
+use App\Mail\UserRegistered;
 use App\Models\Organization;
 use App\Models\UserApiToken;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Mail\UserRegistered;
-use App\Models\UserVerificationToken;
 use Illuminate\Support\Facades\Mail;
+use App\Models\UserVerificationToken;
+use App\Exceptions\AuthenticationError;
+use App\Exceptions\InvalidFormDataError;
 use Illuminate\Support\Facades\Validator;
 
 /**
@@ -51,16 +53,16 @@ class Users extends Controller
         ]);
 
         if ($validator->fails()) { // Validation fails.
-            return Api::generateErrorResponse(401, 'AuthenticationError', Api::getFirstValidationError($validator));
+            throw new InvalidFormDataError(Api::getFirstValidationError($validator));
         }
 
         // Authenticate user by email, password and status.
         if (is_null($user = User::where('email', $request->json('email'))->first())) {
-            return Api::generateErrorResponse(401, 'AuthenticationError', 'User email and password do not match.');
+            throw new AuthenticationError('User email and password do not match.');
         } else if (!password_verify($request->json('password'), $user->password)) {
-            return Api::generateErrorResponse(401, 'AuthenticationError', 'User email and password do not match.');
+            throw new AuthenticationError('User email and password do not match.');
         } else if ($user->status == 'banned') { // User is banned
-            return Api::generateErrorResponse(401, 'AuthenticationError', 'User is unable to log in.');
+            throw new AuthenticationError('User is unable to log in.');
         }
 
         // Generate and save api token.
@@ -112,7 +114,7 @@ class Users extends Controller
         ]);
 
         if ($validator->fails()) { // Validation fails.
-            return Api::generateErrorResponse(105, 'InvalidFormDataError', Api::getFirstValidationError($validator));
+            throw new InvalidFormDataError(Api::getFirstValidationError($validator));
         }
 
 
@@ -200,7 +202,7 @@ class Users extends Controller
         ]);
 
         if ($validator->fails()) { // Validation fails.
-            return Api::generateErrorResponse(105, 'InvalidFormDataError', Api::getFirstValidationError($validator));
+            throw new InvalidFormDataError(Api::getFirstValidationError($validator));
         }
 
         // Update user profile.
