@@ -39,7 +39,11 @@ Route::group(['prefix' => '/v1'], function () {
 
     // Student routes.
     Route::group(['prefix' => '/student', 'middleware' => 'auth:api'], function() {
-        Route::post('/{student}', 'Students@updateVisits')->middleware('check_user_type:organization');
+
+        Route::group(['middleware' => 'check_user_type:organization'], function() {
+            Route::post('/{student}', 'Students@updateVisits');
+            Route::post('/hire/{student}', 'Students@hireStudent')->middleware('check_user_verified');
+        });
 
         Route::group(['middleware' => 'check_user_type:student'], function() {
             Route::get('/overview', 'Students@profileOverview');

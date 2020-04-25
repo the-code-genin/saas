@@ -14,11 +14,12 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Exceptions\AuthenticationError;
 use App\Exceptions\InvalidFormDataError;
+use App\Models\StudentHire;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\StudentApplicationSubmitted;
-use Illuminate\Support\Facades\Log;
+use App\Notifications\StudentJobOffer;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Students extends Controller
@@ -162,6 +163,40 @@ class Students extends Controller
             'success' => true,
             'payload' => [
                 'data' => $application->refresh()->load(['job', 'job.organization', 'job.skills'])
+            ]
+        ];
+    }
+
+    /**
+     * Send a job offer to a student.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\User $student
+     *
+     * @return array
+     */
+    public function hireStudent(Request $request, User $student): array
+    {
+        if ($student->verified != true) {
+            throw new AuthenticationError('The student is yet to be verified.');
+        } else if (!$student->userable->available_for_job) {
+            throw new AuthenticationError('The student is not available to take any jobs currently.');
+        }
+
+        // Send the job offer.
+        $hire = new StudentHire();
+        $hire->organization_id = $request->user()->id;
+        $hire->student_id = $student->id;
+        $hire->save();
+
+        // Send notifications to the organization and student.
+        Notification::send([$request->user(), $student], new StudentJobOffer($hire));
+
+        // Response.
+        return [
+            'success' => true,
+            'payload' => [
+                'data' => $hire->refresh()->load(['student', 'organization'])
             ]
         ];
     }
