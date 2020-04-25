@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use App\Guards\ApiGuard;
 use App\Models\Job;
+use App\Models\StudentHire;
 use App\Policies\JobPolicy;
+use App\Policies\StudentHirePolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +20,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Job::class => JobPolicy::class,
+        StudentHire::class => StudentHirePolicy::class
     ];
 
     /**
