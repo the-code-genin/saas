@@ -8,8 +8,7 @@ use App\Models\StudentProfileView;
 
 $factory->define(StudentProfileView::class, function (Faker $faker) {
     $now = Carbon::now();
-    $remainingMonths = 12 - $now->month;
     return [
-        'created_at' => $faker->dateTimeBetween("- {$now->month} months", "$remainingMonths  months")
+        'created_at' => $faker->dateTimeBetween("- {$now->month} months")
     ];
 });

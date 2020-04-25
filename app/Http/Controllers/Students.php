@@ -53,7 +53,6 @@ class Students extends Controller
         $monthData = [
             'total' => $request->user()->userable->views()
                 ->where(DB::raw('YEAR(student_profile_views.created_at)'), $now->year)
-                ->where(DB::raw('MONTH(student_profile_views.created_at)'), $now->month)
                 ->count()
         ];
         $weekData = [];
@@ -66,14 +65,11 @@ class Students extends Controller
 
             if ($i == $now->month) {
                 $weekData['total'] = $monthData[$i];
-                foreach (range(1, 4) as $j) {
-                    $weekData[$j] = $request->user()->userable->views()
+                $firstWeek = $now->firstOfMonth()->week;
+                foreach (range(0, 3) as $j) {
+                    $weekData[$j + 1] = $request->user()->userable->views()
                         ->where(DB::raw('YEAR(student_profile_views.created_at)'), $now->year)
-                        ->where(DB::raw('MONTH(student_profile_views.created_at)'), $i)
-                        ->where(
-                            DB::raw('WEEK(student_profile_views.created_at,5)-WEEK(DATE_SUB(student_profile_views.created_at, INTERVAL DAYOFMONTH(student_profile_views.created_at)-1 DAY),5)+1'),
-                            $j
-                        )
+                        ->where(DB::raw('WEEK(student_profile_views.created_at)'), $firstWeek + $j)
                         ->count();
                 }
             }
