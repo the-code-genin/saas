@@ -44,7 +44,7 @@ class StudentApplicationSubmitted extends Notification
      */
     public function toMail($notifiable)
     {
-        $message = new MailMessage;
+        $message = (new MailMessage)->subject('Job Application Submitted');
 
         if ($notifiable->userable_type == Student::class) {
             $message->greeting("Hello {$notifiable->userable->full_name}!")
@@ -72,7 +72,7 @@ class StudentApplicationSubmitted extends Notification
         }
 
         return [
-            'type' => 'StudentApplicationSubmitted',
+            'type' => 'JobApplicationSubmitted',
             'message' => $message
         ];
     }
