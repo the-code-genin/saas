@@ -31,7 +31,7 @@ Route::group(['prefix' => '/v1'], function () {
 
 
     // Experts routes.
-    Route::group(['prefix' => '/experts', 'middleware' => 'auth:api'], function() {
+    Route::group(['prefix' => '/experts'], function() {
         Route::get('/', 'Experts@index');
         Route::get('/{expert}', 'Experts@show');
     });
