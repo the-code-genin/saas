@@ -96,4 +96,13 @@ class Student extends Model
         return $this->hasManyThrough(JobApplication::class, User::class, 'userable_id', 'student_id');
     }
 
+    /**
+     * Get the student's job offers.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function hires(): HasManyThrough
+    {
+        return $this->hasManyThrough(StudentHire::class, User::class, 'userable_id', 'student_id');
+    }
 }
