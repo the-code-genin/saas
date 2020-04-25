@@ -1,25 +1,13 @@
-@extends('emails.base')
+@component('emails.base')
 
-@section('content')
-<h2>
-    Hello, {{ $user->user_type == 'student' ? $user->userable->full_name : $user->userable->name }}!
-</h2>
+# Hello, {{ $user->user_type == 'student' ? $user->userable->full_name : $user->userable->name }}!
 
-<br>
+Welcome to the Students as a Service platfrom! We are so glad that you have decided to joined our community.
 
-<p>
-    Welcome to the Students as a Service platfrom! We are so glad that you have decided to joined our community.
-</p>
+Please follow the link below to verify your account.
 
-<p>
-    Please follow the link below to verify your account.
-</p>
+@component('mail::button', ['url' => route('user.verify', ['token' => $token->token]), 'color' => 'primary' ])
+    Verify your account.
+@endcomponent
 
-<br>
-
-<p>
-    <a href="{{ route('user.verify', ['token' => $token->token]) }}">
-        Verify your account.
-    </a>
-</p>
-@endsection
+@endcomponent

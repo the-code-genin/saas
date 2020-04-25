@@ -37,7 +37,7 @@ class UserRegistered extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.welcome', [ 'user' => $this->user, 'token' => $this->token ])
+        return $this->markdown('emails.welcome', [ 'user' => $this->user, 'token' => $this->token ])
             ->subject('Welcome To SaaS!');
     }
 }

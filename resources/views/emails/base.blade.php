@@ -1,14 +1,13 @@
-<h1>
-    <b>SaaS</b>
-</h1>
+@component('mail::message')
 
-<br><br>
+{{ $slot }}
 
-@yield('content')
+{{-- Salutation --}}
+@if (! empty($salutation))
+{{ $salutation }}
+@else
+@lang('Regards'),<br>
+{{ config('app.name') }}
+@endif
 
-<br><br>
-
-<p>
-    Best Regards, <br>
-    SaaS.
-</p>
+@endcomponent

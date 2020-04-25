@@ -1,11 +1,9 @@
-@extends('emails.base')
+@component('emails.base')
 
-@section('content')
-<h2>
-    Hello, {{ $user->user_type == 'student' ? $user->userable->full_name : $user->userable->name }}!
-</h2>
+# Hello, {{ $user->user_type == 'student' ? $user->userable->full_name : $user->userable->name }}!
 
-<br>
+You have successfully verified your account.
 
-<p>You have successfully verified your account.</p>
-@endsection
+We look forward to your contributions on our platform.
+
+@endcomponent

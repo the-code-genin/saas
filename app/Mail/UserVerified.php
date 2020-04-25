@@ -32,7 +32,7 @@ class UserVerified extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.verified', [ 'user' => $this->user ])
+        return $this->markdown('emails.verified', [ 'user' => $this->user ])
             ->subject('Account verified!');
     }
 }
