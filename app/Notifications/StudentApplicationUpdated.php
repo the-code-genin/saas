@@ -44,7 +44,7 @@ class StudentApplicationUpdated extends Notification
      */
     public function toMail($notifiable)
     {
-        $message = (new MailMessage)->subject('Job Application' . ucfirst($this->application->status));
+        $message = (new MailMessage)->subject('Job Application ' . ucfirst($this->application->status));
 
         if ($notifiable->userable_type == Student::class) {
             $message->greeting("Hello {$notifiable->userable->full_name}!")
