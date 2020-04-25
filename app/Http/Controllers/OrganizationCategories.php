@@ -5,7 +5,6 @@ use App\Helpers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\OrganizationCategory;
-use Illuminate\Pagination\Paginator;
 
 /**
  * Resource controller for organization categories.
