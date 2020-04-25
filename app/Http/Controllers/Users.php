@@ -96,7 +96,7 @@ class Users extends Controller
             'phone_number' => 'required|phone_number',
             'user_type' => 'required|in:student,organization',
             'full_name' => 'required_if:user_type,student',
-            'availability' => 'required_if:user_type,student|in:freelance,part_time',
+            'availability' => 'required_if:user_type,student|in:freelance,full_time,part_time,week_days,week_ends',
             'hourly_rate' => 'required_if:user_type,student|numeric',
             'name' => 'required_if:user_type,organization|unique:App\Models\Organization,name',
             'description' => 'required_if:user_type,organization',
@@ -183,7 +183,7 @@ class Users extends Controller
         $validator = Validator::make($request->json()->all(), [
             'password' => 'nullable|min:6',
             'phone_number' => 'nullable|phone_number',
-            'availability' => 'nullable|in:freelance,part_time',
+            'availability' => 'nullable|in:freelance,full_time,part_time,week_days,week_ends',
             'hourly_rate' => 'nullable|numeric',
             'available_for_job' => 'nullable|in:true,false',
             'proficiency' => 'nullable|in:beginner,intern,expert',
