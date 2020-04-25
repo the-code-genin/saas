@@ -183,6 +183,8 @@ class Students extends Controller
     {
         if ($student->verified != true) {
             throw new AuthenticationError('The student is yet to be verified.');
+        } else if ($student->userable_type != Student::class) {
+            throw new NotFoundHttpException('The resource you requested for was not found.');
         } else if (!$student->userable->available_for_job) {
             throw new AuthenticationError('The student is not available to take any jobs currently.');
         }
