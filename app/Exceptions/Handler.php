@@ -15,7 +15,8 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        //
+        AuthenticationError::class,
+        InvalidFormDataError::class
     ];
 
     /**
