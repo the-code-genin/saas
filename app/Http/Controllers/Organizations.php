@@ -7,6 +7,10 @@ use App\Helpers\Api;
 use Illuminate\Http\Request;
 use App\Models\JobApplication;
 use App\Exceptions\AuthenticationError;
+use App\Exceptions\InvalidFormDataError;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\StudentApplicationUpdated;
 
 class Organizations extends Controller
 {
@@ -41,6 +45,8 @@ class Organizations extends Controller
     {
         if (!$request->user()->can('update', $job)) {
             throw new AuthenticationError('You can not close the job.');
+        } else if ($job->status == 'closed') {
+            throw new AuthenticationError("This job has already been closed.");
         }
 
         // Close the job.
@@ -90,6 +96,36 @@ class Organizations extends Controller
      */
     public function updateJobApplication(Request $request, JobApplication $jobApplication): array
     {
-        return [];
+        if (!$request->user()->can('viewApplications', $jobApplication->job)) {
+            throw new AuthenticationError('User can not view applications for this job.');
+        } else if ($jobApplication->status != 'pending') {
+            throw new AuthenticationError("This job application has already been {$jobApplication->status}.");
+        }
+
+        // Validate input.
+        $validator = Validator::make($request->json()->all(), [
+            'status' => 'required|in:accepted,rejected',
+        ], [
+            'status.in' => 'Invalid value for status.',
+        ]);
+
+        if ($validator->fails()) { // Validation fails.
+            throw new InvalidFormDataError(Api::getFirstValidationError($validator));
+        }
+
+        // Update the job application status.
+        $jobApplication->status = $request->json('status');
+        $jobApplication->save();
+
+        // Send notifications to the organization and student.
+        Notification::send([$request->user(), $jobApplication->student], new StudentApplicationUpdated($jobApplication));
+
+        // Response.
+        return [
+            'success' => true,
+            'payload' => [
+                'data' => $jobApplication->refresh()->load(['student', 'job', 'job.skills'])
+            ]
+        ];
     }
 }
