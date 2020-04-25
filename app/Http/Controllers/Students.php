@@ -39,9 +39,11 @@ class Students extends Controller
             $applications->where('student_id', $request->user()->id);
         })->count();
 
+        $noJobOffersReceived = $request->user()->userable->hires()->count();
+
         $noJobsAppliedDone = Job::whereHas('applications', function (Builder $applications) use($request) {
             $applications->where('student_id', $request->user()->id)->where('status', 'accepted');
-        })->count();
+        })->count() + $request->user()->userable->hires()->where('student_hires.status', 'accepted')->count();
 
 
         $now = Carbon::now();
@@ -84,6 +86,7 @@ class Students extends Controller
             'payload' => [
                 'data' => [
                     'jobs_applied_for' => $noJobsAppliedFor,
+                    'job_offers_received' => $noJobOffersReceived,
                     'jobs_done' => $noJobsAppliedDone,
                     'visits' => [
                         'total' => $totalViews,
