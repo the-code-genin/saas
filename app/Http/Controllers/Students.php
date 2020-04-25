@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\StudentApplicationSubmitted;
 use App\Notifications\StudentJobOffer;
+use App\Notifications\StudentJobOfferUpdated;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Students extends Controller
@@ -197,6 +198,49 @@ class Students extends Controller
             'success' => true,
             'payload' => [
                 'data' => $hire->refresh()->load(['student', 'organization'])
+            ]
+        ];
+    }
+
+    /**
+     * Update the value of a job offer from a company.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\StudentHire $offer
+     *
+     * @return array
+     */
+    public function updateJobOffer(Request $request, StudentHire $offer): array
+    {
+        if (!$request->user()->can('update', $offer)) {
+            throw new AuthenticationError('You can not modify this job offer.');
+        } else if ($offer->status != 'pending') {
+            throw new AuthenticationError("This job offer has already been {$offer->status}.");
+        }
+
+        // Validate input.
+        $validator = Validator::make($request->json()->all(), [
+            'status' => 'required|in:accepted,rejected',
+        ], [
+            'status.in' => 'Invalid value for status.',
+        ]);
+
+        if ($validator->fails()) { // Validation fails.
+            throw new InvalidFormDataError(Api::getFirstValidationError($validator));
+        }
+
+        // Update the job application status.
+        $offer->status = $request->json('status');
+        $offer->save();
+
+        // Send notifications to the organization and student.
+        Notification::send([$request->user(), $offer->organization], new StudentJobOfferUpdated($offer));
+
+        // Response.
+        return [
+            'success' => true,
+            'payload' => [
+                'data' => $offer->refresh()->load(['student', 'organization'])
             ]
         ];
     }
