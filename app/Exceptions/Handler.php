@@ -53,7 +53,20 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $exception)
     {
         if (preg_match('/(.*)\/api\/(.*)/i', $request->fullUrl())) { // API request.
-            return Api::generateErrorResponse($exception->getCode() | 404, (new ReflectionClass($exception))->getShortName(), $exception->getMessage());
+            $code = $exception->getCode() | 404;
+            $className = (new ReflectionClass($exception))->getShortName();
+
+            switch ($className) {
+                case 'ModelNotFoundException':
+                    $response = Api::generateErrorResponse(404, 'NotFoundError', 'The resource you were looking for was not found.');
+                    break;
+
+                default:
+                    $response = Api::generateErrorResponse($code, $className, $exception->getMessage());
+                    break;
+            }
+
+            return $response;
         }
 
         return parent::render($request, $exception);
