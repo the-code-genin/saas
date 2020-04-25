@@ -61,6 +61,10 @@ class Handler extends ExceptionHandler
                     $response = Api::generateErrorResponse(404, 'NotFoundError', 'The resource you were looking for was not found.');
                     break;
 
+                case 'Error':
+                    $response = Api::generateErrorResponse(500, 'ServerError', 'An error occured.');
+                    break;
+
                 default:
                     $response = Api::generateErrorResponse($code, $className, $exception->getMessage());
                     break;
