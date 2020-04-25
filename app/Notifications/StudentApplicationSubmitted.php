@@ -48,7 +48,8 @@ class StudentApplicationSubmitted extends Notification
 
         if ($notifiable->userable_type == Student::class) {
             $message->greeting("Hello {$notifiable->userable->full_name}!")
-                ->line('Your job application has been submitted.');
+                ->line('Your job application has been submitted.')
+                ->line('We will notify you when the organization has either accepted or rejected your application.');
         } else {
             $message->greeting("Hello {$notifiable->userable->name}!")
                 ->line('A student has applied for one of the jobs you posted.');
