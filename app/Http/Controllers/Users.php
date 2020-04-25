@@ -149,9 +149,8 @@ class Users extends Controller
 
 
         // Generate and save verification token.
-        $hex = bin2hex(random_bytes(64));
         $verificationToken = new UserVerificationToken();
-        $verificationToken->token = '$' . '.' . $user->id . '.' . password_hash($hex, PASSWORD_DEFAULT) . '.' . $hex;
+        $verificationToken->token = $user->id . '.' . bin2hex(random_bytes(120));
         $user->verificationTokens()->save($verificationToken);
 
 

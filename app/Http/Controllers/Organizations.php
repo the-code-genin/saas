@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\AuthenticationError;
 use App\Models\Job;
 use App\Helpers\Api;
 use Illuminate\Http\Request;
+use App\Models\JobApplication;
+use App\Exceptions\AuthenticationError;
 
 class Organizations extends Controller
 {
@@ -77,5 +78,18 @@ class Organizations extends Controller
                 'data' => $payload
             ]
         ];
+    }
+
+    /**
+     * Update a job application's status.
+     *
+     * @param Request $request
+     * @param \App\Models\JobApplication $jobApplication
+     *
+     * @return array
+     */
+    public function updateJobApplication(Request $request, JobApplication $jobApplication): array
+    {
+        return [];
     }
 }
