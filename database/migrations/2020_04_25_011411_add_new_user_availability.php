@@ -25,7 +25,7 @@ class AddNewUserAvailability extends Migration
         });
 
         Schema::table('students', function(Blueprint $table) {
-            $table->enum('availability', ['freelance', 'full_time', 'part_time', 'week_days', 'week_ends']);
+            $table->enum('availability', ['freelance', 'full_time', 'part_time', 'week_days', 'week_ends'])->nullable();
         });
 
         DB::update('UPDATE students SET availability = _temp_column', []);
@@ -53,7 +53,7 @@ class AddNewUserAvailability extends Migration
         });
 
         Schema::table('students', function(Blueprint $table) {
-            $table->enum('availability', ['freelance', 'part_time']);
+            $table->enum('availability', ['freelance', 'part_time'])->nullable();
         });
 
         DB::update('UPDATE students SET availability = _temp_column', []);
