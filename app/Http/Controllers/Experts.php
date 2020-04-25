@@ -83,7 +83,7 @@ class Experts extends Controller
         return [
             'success' => true,
             'payload' => [
-                'data' => $expert->load('userable.skills')
+                'data' => $expert->load('userable.skills', 'userable.hires.organization')
             ]
         ];
     }
