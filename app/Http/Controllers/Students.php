@@ -65,6 +65,7 @@ class Students extends Controller
                 ->count();
 
             if ($i == $now->month) {
+                $weekData['total'] = $monthData[$i];
                 foreach (range(1, 4) as $j) {
                     $weekData[$j] = $request->user()->userable->views()
                         ->where(DB::raw('YEAR(student_profile_views.created_at)'), $now->year)
@@ -77,7 +78,6 @@ class Students extends Controller
                 }
             }
         }
-
 
 
         // Response
