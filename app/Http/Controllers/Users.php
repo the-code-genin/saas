@@ -100,7 +100,7 @@ class Users extends Controller
             'hourly_rate' => 'required_if:user_type,student|numeric',
             'name' => 'required_if:user_type,organization|unique:App\Models\Organization,name',
             'description' => 'required_if:user_type,organization',
-            'category_id' => 'required_if:user_type,organization|exists:organization_categories,id',
+            'category_id' => 'required_if:user_type,organization|numeric|exists:organization_categories,id',
         ], [
             'email.email' => 'Email field must be a valid email.',
             'email.unique' => 'This email has been taken.',
@@ -188,7 +188,7 @@ class Users extends Controller
             'available_for_job' => 'nullable|in:true,false',
             'proficiency' => 'nullable|in:beginner,intern,expert',
             'name' => "nullable|unique:App\Models\Organization,name,{$user->id}",
-            'category_id' => 'nullable|exists:organization_categories,id',
+            'category_id' => 'nullable|numeric|exists:organization_categories,id',
         ], [
             'password.min' => 'Password must be at least 6 characters long.',
             'phone_number.phone_number' => 'Phone number field must be a valid phone number.',
