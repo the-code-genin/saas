@@ -37,7 +37,9 @@ class UserRegistered extends Mailable
      */
     public function build()
     {
+        $app_name = env('APP_NAME');
+
         return $this->markdown('emails.welcome', [ 'user' => $this->user, 'token' => $this->token ])
-            ->subject('Welcome To SaaS!');
+            ->subject("Welcome To {$app_name}!");
     }
 }
