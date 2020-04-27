@@ -183,6 +183,7 @@ class Users extends Controller
         $validator = Validator::make($request->json()->all(), [
             'password' => 'nullable|min:6',
             'phone_number' => 'nullable|phone_number',
+            'matric_no' => 'nullable|numeric',
             'availability' => 'nullable|in:freelance,full_time,part_time,week_days,week_ends',
             'hourly_rate' => 'nullable|numeric',
             'available_for_job' => 'nullable|in:true,false',
@@ -214,6 +215,8 @@ class Users extends Controller
                 $user->userable->available_for_job = $input->retrieve('available_for_job', $user->userable->available_for_job);
                 $user->userable->proficiency = $input->retrieve('proficiency', $user->userable->proficiency);
                 $user->userable->bio = $input->retrieve('bio', $user->userable->bio);
+                $user->userable->matric_no = $input->retrieve('matric_no', $user->userable->matric_no);
+                $user->userable->location = $input->retrieve('location', $user->userable->location);
             break;
 
             case 'organization':
