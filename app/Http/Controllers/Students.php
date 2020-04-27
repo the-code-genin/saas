@@ -50,31 +50,42 @@ class Students extends Controller
 
         // Total views for the year.
         $totalViews = $request->user()->userable->views()
-            ->where(DB::raw('YEAR(student_profile_views.created_at)'), $now->year)
+            ->whereYear('student_profile_views.created_at', '=', $now->year)
             ->count();
 
         // View data for the month.
-        $monthData = [
-            'total' => $request->user()->userable->views()
-                ->where(DB::raw('YEAR(student_profile_views.created_at)'), $now->year)
-                ->count()
-        ];
+        $monthData = [ 'total' => $totalViews ];
         $weekData = [];
 
         foreach (range(1, 12) as $i) {
             $monthData[$i] = $request->user()->userable->views()
-                ->where(DB::raw('YEAR(student_profile_views.created_at)'), $now->year)
-                ->where(DB::raw('MONTH(student_profile_views.created_at)'), $i)
+                ->whereYear('student_profile_views.created_at', '=', $now->year)
+                ->whereMonth('student_profile_views.created_at', '=', $i)
                 ->count();
 
             if ($i == $now->month) {
                 $weekData['total'] = $monthData[$i];
-                $firstWeek = $now->firstOfMonth()->week - 1;
+
+                // Get statistics for the month.
                 foreach (range(0, 3) as $j) {
                     $weekData[$j + 1] = $request->user()->userable->views()
-                        ->where(DB::raw('YEAR(student_profile_views.created_at)'), $now->year)
-                        ->where(DB::raw('WEEK(student_profile_views.created_at)'), $firstWeek + $j)
-                        ->count();
+                        ->whereYear('student_profile_views.created_at', '=', $now->year)
+                        ->whereMonth('student_profile_views.created_at', '=', $i)
+                        ->whereBetween('student_profile_views.created_at', [
+                            Carbon::now()->firstOfMonth()->addDays($j * 7),
+                            Carbon::now()->firstOfMonth()->addDays(($j + 1) * 7)
+                        ])->count();
+                }
+
+                // If the month has more than 4 weeks.
+                if ($now->daysInMonth > 28) {
+                    $weekData[5] = $request->user()->userable->views()
+                        ->whereYear('student_profile_views.created_at', '=', $now->year)
+                        ->whereMonth('student_profile_views.created_at', '=', $i)
+                        ->whereBetween('student_profile_views.created_at', [
+                            Carbon::now()->firstOfMonth()->addDays(4 * 7),
+                            Carbon::now()->firstOfMonth()->addDays(5 * 7)
+                        ])->count();
                 }
             }
         }
