@@ -1,12 +1,12 @@
+> NOTE
+This branch isn't the branch that was submitted, this is the branch of work we continued after submission due to our enthusiasm. For submission code, please check the [master branch](https://github.com/Iyiola-am/saas)
+
+
 # Stuaas Backend API
 
 Stuaas is a job board website where companies are able to post jobs to be applied for by students, and companies can as well hire students based on their profile.
 
 This repository is the backend API of the project written in php. The API is currently hosted on [https://stuaas.herokuapp.com](https://stuaas.herokuapp.com).
-
-The master branch of the repository should be used for grading.
-
-**NOTE:** Work is still being done on the repository and can be tested locally on branch "post-submission".
 
 ## Requirements
 
