@@ -67,16 +67,6 @@ class Student extends Model
     }
 
     /**
-     * Get the skills that this job requires.
-     *
-     * @return HasMany
-     */
-    public function skills(): HasMany
-    {
-        return $this->hasMany(StudentSkill::class, 'student_id', 'id');
-    }
-
-    /**
      * Get the views for the student profile.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
