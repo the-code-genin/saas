@@ -217,6 +217,8 @@ class Users extends Controller
                 $user->userable->bio = $input->retrieve('bio', $user->userable->bio);
                 $user->userable->matric_no = $input->retrieve('matric_no', $user->userable->matric_no);
                 $user->userable->location = $input->retrieve('location', $user->userable->location);
+                $user->userable->experience = $input->retrieve('experience', $user->userable->experience);
+                $user->userable->skills = $input->retrieve('location', $user->userable->skills);
             break;
 
             case 'organization':
