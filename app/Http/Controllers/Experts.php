@@ -25,15 +25,12 @@ class Experts extends Controller
     public function index(Request $request): array
     {
         $results = User::select(['*'])
-            ->where('userable_type', Student::class)
-            ->with('userable.skills');
+            ->where('userable_type', Student::class);
 
         if (!empty($request->get('skill'))) { // If a skill filter is set
             $skill = $request->get('skill');
             $results = $results->whereHasMorph('userable', [Student::class], function(Builder $student) use ($skill) {
-                $student->whereHas('skills', function(Builder $skills) use ($skill) {
-                    $skills->where('name', 'LIKE', "%{$skill}%");
-                });
+                $student->where('skills', 'LIKE', "%{$skill}%");
             }, '>', 0);
         }
 
@@ -83,7 +80,7 @@ class Experts extends Controller
         return [
             'success' => true,
             'payload' => [
-                'data' => $expert->load('userable.skills', 'userable.hires.organization')
+                'data' => $expert->load('userable.hires.organization')
             ]
         ];
     }
