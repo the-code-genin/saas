@@ -8,12 +8,51 @@ use Illuminate\Http\Request;
 use App\Models\JobApplication;
 use App\Exceptions\AuthenticationError;
 use App\Exceptions\InvalidFormDataError;
+use App\Models\StudentHire;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\StudentApplicationUpdated;
+use Illuminate\Support\Facades\Log;
 
 class Organizations extends Controller
 {
+    /**
+     * Get profile overview for a student.
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return array
+     */
+    public function profileOverview(Request $request): array
+    {
+        // Statistical data.
+        $noJobsPosted = $request->user()->userable->jobs()->count();
+
+        $noJobsCompleted = Job::where('jobs.user_id', $request->user()->id)
+            ->where('job_applications.status', 'accepted')
+            ->join('job_applications', 'job_applications.job_id', 'jobs.id')
+            ->join('users', 'job_applications.student_id', 'users.id')
+            ->count();
+
+        $hires = StudentHire::where('student_hires.organization_id', $request->user()->id)
+            ->where('status', 'accepted')
+            ->count();
+
+        $noStudentsHired = $hires + $noJobsCompleted;
+
+        // Response
+        return [
+            'success' => true,
+            'payload' => [
+                'data' => [
+                    'jobs_posted' => $noJobsPosted,
+                    'students_hired' => $noStudentsHired,
+                    'jobs_completed' => $noJobsCompleted,
+                ]
+            ]
+        ];
+    }
+
     /**
      * Get all jobs for the organization.
      *
