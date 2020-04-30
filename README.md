@@ -6,7 +6,8 @@ This repository is the backend API of the project written in php. The API is cur
 
 The master branch of the repository should be used for grading.
 
-**NOTE:** Work is still being done on the repository and can be tested locally on branch "post-submission".
+ ### NOTE:
+ We're very enthusiastic about this solution and we want to keep actively working on it, we would keep pushing updates. Any change made after submission will be pushed to the branch ["post-submission".](https://github.com/Iyiola-am/saas/tree/post-submission). So feel free to check our recent progress on the app on the [post-submission branch.](https://github.com/Iyiola-am/saas/tree/post-submission)
 
 ## Requirements
 
